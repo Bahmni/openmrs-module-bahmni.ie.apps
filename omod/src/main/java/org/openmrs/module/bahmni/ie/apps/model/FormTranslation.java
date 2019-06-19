@@ -11,6 +11,7 @@ public class FormTranslation {
     private Map<String, String> concepts;
     private String formName;
     private String version;
+    private String referenceVersion;
 
     public String getLocale() {
         return locale;
@@ -50,6 +51,14 @@ public class FormTranslation {
 
     public void setLabels(Map<String, String> labels) {
         this.labels = labels;
+    }
+
+    public String getReferenceVersion() {
+        return referenceVersion;
+    }
+
+    public void setReferenceVersion(String referenceVersion) {
+        this.referenceVersion = referenceVersion;
     }
 
     public static FormTranslation parse(JSONObject jsonObject, String locale) {
