@@ -465,6 +465,32 @@ public class BahmniFormTranslationServiceImplTest {
         assertEquals(expected, FileUtils.readFileToString(translationFile));
     }
 
+    @Test
+    public void shouldCopyTranslationsFromImportedForm() throws IllegalAccessException, NoSuchFieldException, IOException {
+        BahmniFormTranslationService bahmniFormTranslationService = new BahmniFormTranslationServiceImpl();
+        String tempTranslationsPath = createTempFolder();
+
+        String importedTranslationsPath = tempTranslationsPath + "/test_form_1.json";
+        String importedTranslationsJson = "{\"en\":{\"concepts\":{\"TEMPERATURE_1\":\"Temperature\",\"TEMPERATURE_1_DESC\":\"Temperature\"},\"labels\":{\"LABEL_2\":\"Vitals\"}}" +
+                ",\"fr\":{\"concepts\":{\"TEMPERATURE_1\":\"Temperature\",\"TEMPERATURE_1_DESC\":\"Temperature\"},\"labels\":{\"LABEL_2\":\"Vitals\"}}}";
+        FileUtils.writeStringToFile(new File(importedTranslationsPath), importedTranslationsJson);
+
+        FormTranslation defaultFormTranslations = createFormTranslation("en", "1", "test_form");
+        defaultFormTranslations.setReferenceVersion("1");
+        HashMap<String, String> concepts = new HashMap<>();
+        concepts.put("TEMPERATURE_1", "Some Default");
+        concepts.put("TEMPERATURE_1_DESC", "Some Default");
+        defaultFormTranslations.setConcepts(concepts);
+        HashMap<String, String> labels = new HashMap<>();
+        labels.put("LABEL_2", "Some Defaults");
+        defaultFormTranslations.setLabels(labels);
+        bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Arrays.asList(defaultFormTranslations)));
+
+        File translationFile = new File(tempTranslationsPath + "/test_form_1.json");
+        assertTrue(translationFile.exists());
+        assertEquals(importedTranslationsJson, FileUtils.readFileToString(translationFile));
+    }
+
     private static FormTranslation createFormTranslation(String locale, String version, String formName) {
         FormTranslation formTranslation = new FormTranslation();
         formTranslation.setLocale(locale);

@@ -67,7 +67,7 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
                 translationsJson.put(formTranslation.getLocale(), getUpdatedTranslations(formTranslation));
             }
             int formVersion = isNotEmpty(version) ? Integer.parseInt(version) : 0;
-            if (formVersion > 1 && isNotEmpty(refVersion)) {
+            if (formVersion > 0 && isNotEmpty(refVersion)) {
                 JSONObject previousTranslationsJson = getTranslations(new File(getFileName(formName, refVersion)));
                 if (!previousTranslationsJson.keySet().isEmpty())
                     updatePreviousVersionLocaleTranslations(translation, translationsJson, previousTranslationsJson);
