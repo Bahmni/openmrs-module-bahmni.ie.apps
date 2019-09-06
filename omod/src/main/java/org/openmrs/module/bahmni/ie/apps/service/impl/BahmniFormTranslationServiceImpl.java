@@ -67,10 +67,11 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
                 translationsJson.put(formTranslation.getLocale(), getUpdatedTranslations(formTranslation));
             }
             int formVersion = isNotEmpty(version) ? Integer.parseInt(version) : 0;
-            if (formVersion > 0 && isNotEmpty(refVersion)) {
-                JSONObject previousTranslationsJson = getTranslations(new File(getFileName(formName, refVersion)));
-                if (!previousTranslationsJson.keySet().isEmpty())
-                    updatePreviousVersionLocaleTranslations(translation, translationsJson, previousTranslationsJson);
+            boolean formHaveRefVersion = formVersion > 0 && isNotEmpty(refVersion);
+            if (formHaveRefVersion) {
+                JSONObject refVersionTranslationsJson = getTranslations(new File(getFileName(formName, refVersion)));
+                if (!refVersionTranslationsJson.keySet().isEmpty())
+                    updateTranslationsWithRefVersion(translation, translationsJson, refVersionTranslationsJson);
             }
             saveTranslationsToFile(translationsJson, translationFile);
         }
@@ -78,26 +79,25 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
         return formTranslations;
     }
 
-    private void updatePreviousVersionLocaleTranslations(FormTranslation translation, JSONObject translationsJson,
-                                                         JSONObject previousTranslationsJson) {
-        Iterator<String> locales = previousTranslationsJson.keys();
+    private void updateTranslationsWithRefVersion(FormTranslation translation, JSONObject translationsJson,
+                                                  JSONObject refVersionTranslationsJson) {
+        Iterator<String> locales = refVersionTranslationsJson.keys();
         while (locales.hasNext()) {
             String locale = locales.next();
             boolean isDefaultLocale = locale.equals(translation.getLocale());
-            JSONObject localeTranslations = previousTranslationsJson.getJSONObject(locale);
+            JSONObject localeTranslations = refVersionTranslationsJson.getJSONObject(locale);
             localeTranslations.put("concepts", getUpdatedLocaleTranslationsForControls(localeTranslations.getJSONObject("concepts"), translation.getConcepts(), isDefaultLocale));
             localeTranslations.put("labels", getUpdatedLocaleTranslationsForControls(localeTranslations.getJSONObject("labels"), translation.getLabels(), isDefaultLocale));
             translationsJson.put(locale, localeTranslations);
         }
     }
 
-    private Map<String, String> getUpdatedLocaleTranslationsForControls(JSONObject previousVersionControls, Map<String, String> currentVersionControls, boolean isDefualtLocale) {
-        // Controls can be either CONCEPTS or LABELS`
+    private Map<String, String> getUpdatedLocaleTranslationsForControls(JSONObject refVersionControls, Map<String, String> currentVersionControls, boolean isDefualtLocale) {
         if (CollectionUtils.isEmpty(currentVersionControls))
             return new HashMap<>();
         currentVersionControls.keySet().forEach(control -> {
-            if (previousVersionControls.has(control))
-                currentVersionControls.put(control, previousVersionControls.getString(control));
+            if (refVersionControls.has(control))
+                currentVersionControls.put(control, refVersionControls.getString(control));
             else currentVersionControls.put(control, isDefualtLocale ? currentVersionControls.get(control) : control);
         });
         return currentVersionControls;

@@ -466,6 +466,19 @@ public class BahmniFormTranslationServiceImplTest {
     }
 
     @Test
+    public void shouldSaveTranslationsWhenVersionIsZero() throws IllegalAccessException, NoSuchFieldException, IOException {
+        BahmniFormTranslationService bahmniFormTranslationService = new BahmniFormTranslationServiceImpl();
+        String tempTranslationsPath = createTempFolder();
+        FormTranslation formTranslationEn = createFormTranslation("en", "0", "test_form");
+        formTranslationEn.setReferenceVersion("3");
+        bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Arrays.asList(formTranslationEn)));
+        String expected = "{\"en\":{\"concepts\":{\"TEMPERATURE_1\":\"Temperature\",\"TEMPERATURE_1_DESC\":\"Temperature\"},\"labels\":{\"LABEL_2\":\"Vitals\"}}}";
+        File translationFile = new File(tempTranslationsPath + "/test_form_0.json");
+        assertTrue(translationFile.exists());
+        assertEquals(FileUtils.readFileToString(translationFile), expected);
+    }
+
+    @Test
     public void shouldCopyTranslationsFromImportedForm() throws IllegalAccessException, NoSuchFieldException, IOException {
         BahmniFormTranslationService bahmniFormTranslationService = new BahmniFormTranslationServiceImpl();
         String tempTranslationsPath = createTempFolder();
