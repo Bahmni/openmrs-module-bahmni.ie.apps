@@ -28,6 +28,7 @@
 	<properties>
 		<openMRSVersion>2.0.2</openMRSVersion>
 		<openMRSWebServicesVersion>2.24.0</openMRSWebServicesVersion>
+		<jsonVersion>20160212</jsonVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
