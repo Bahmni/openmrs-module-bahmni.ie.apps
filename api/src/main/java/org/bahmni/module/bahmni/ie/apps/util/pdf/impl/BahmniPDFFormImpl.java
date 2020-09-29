@@ -12,40 +12,34 @@ import java.io.IOException;
 
 public class BahmniPDFFormImpl implements BahmniPDFForm {
     private final String title;
-    private Document document;
+    private final Document document;
+    private final PdfWriter writer;
+    private final String filename = "BahmniForm.pdf";
 
-    public BahmniPDFFormImpl(String title) {
+    public BahmniPDFFormImpl(String title) throws FileNotFoundException, DocumentException {
         this.title = title;
         document = new Document();
+        writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+        document.open();
+        addTitle();
     }
 
     @Override
-    public String create() throws FileNotFoundException, DocumentException {
-        String filename = "BahmniForm.pdf";
-        PdfWriter.getInstance(document, new FileOutputStream(filename));
-
-        document.open();
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Chunk chunk = new Chunk(title, font);
-
-        document.add(chunk);
+    public String create() {
         document.close();
         return filename;
     }
 
+    private void addTitle() throws DocumentException {
+        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Chunk chunk = new Chunk(title, font);
+        document.add(chunk);
+    }
+
     @Override
-    public void addTextField(String textFieldLabel) throws IOException, DocumentException {
-        String filename = "BahmniForm.pdf";
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
-        document.open();
+    public void addTextField(String textFieldLabel) throws IOException {
         String html = "<table><tr><td style=\"width: 30%;\">" + textFieldLabel + "</td><td style=\"width: 60%; border: 3px solid black; height: 50px;\"></td></tr></table>";
         XMLWorkerHelper.getInstance().parseXHtml(writer, document,
                 new ByteArrayInputStream(html.getBytes()));
-        document.close();
-    }
-
-    public static void main(String[] args) throws IOException, DocumentException {
-        BahmniPDFForm bahmniPDFForm = new BahmniPDFFormImpl("title");
-        bahmniPDFForm.addTextField("Hello");
     }
 }
