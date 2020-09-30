@@ -3,6 +3,8 @@ package org.bahmni.module.bahmni.ie.apps.util.pdf.impl;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +26,11 @@ public class BahmniPDFFormImplTest {
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("bahmni.pdf.directory", "target/test/temp/");
+    }
+
+    @AfterClass
+    public static void afterClass() throws IOException {
+        FileUtils.deleteDirectory(new File("target/test/temp/"));
     }
 
     @Before
