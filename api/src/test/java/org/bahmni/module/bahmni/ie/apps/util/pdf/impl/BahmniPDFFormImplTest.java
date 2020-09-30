@@ -4,12 +4,12 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,8 +21,13 @@ public class BahmniPDFFormImplTest {
     String title = "Bahmni Form";
     BahmniPDFFormImpl bahmniPDFForm;
 
+    @BeforeClass
+    public static void beforeClass() {
+        System.setProperty("bahmni.pdf.directory", "target/test/temp/");
+    }
+
     @Before
-    public void setUp() throws FileNotFoundException, DocumentException {
+    public void setUp() throws IOException, DocumentException {
         bahmniPDFForm = new BahmniPDFFormImpl(title);
     }
 

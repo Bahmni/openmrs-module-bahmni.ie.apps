@@ -1,24 +1,30 @@
 package org.bahmni.module.bahmni.ie.apps.util.pdf.impl;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.BahmniPDFForm;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class BahmniPDFFormImpl implements BahmniPDFForm {
+    private final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
+    private final String BAHMNI_FORM_PATH_PDF = "bahmni.pdf.directory";
+
     private final String title;
     private final Document document;
     private final PdfWriter writer;
-    private final String filename = "BahmniForm.pdf";
+    private final String filename;
     private String html = "";
 
-    public BahmniPDFFormImpl(String title) throws FileNotFoundException, DocumentException {
+    public BahmniPDFFormImpl(String title) throws IOException, DocumentException {
         this.title = title;
+        filename = createDirsAndGetFilePath();
         document = new Document();
         writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
         document.open();
@@ -31,6 +37,16 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
                 new ByteArrayInputStream(html.getBytes()));
         document.close();
         return filename;
+    }
+
+    private String createDirsAndGetFilePath() throws IOException {
+        String pathPrefix = System.getProperty(BAHMNI_FORM_PATH_PDF, DEFAULT_PDF_FOLDER_PATH);
+        String filename = "BahmniForm.pdf";
+        String fullPath = pathPrefix + filename;
+
+        Files.createDirectories(Paths.get(pathPrefix));
+
+        return fullPath;
     }
 
     private void addTitle() {
