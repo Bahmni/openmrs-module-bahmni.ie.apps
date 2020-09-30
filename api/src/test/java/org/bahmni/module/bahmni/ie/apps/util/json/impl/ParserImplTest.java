@@ -43,4 +43,14 @@ public class ParserImplTest {
 
         verify(bahmniPDFForm).setTitle("HackathonForm");
     }
+
+    @Test
+    public void shouldParseJsonAndPrintLabelControl() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"translationKey\":\"LABEL_1\",\"type\":\"label\",\"value\":\"Label-1\",\"id\":\"1\"}]}}]}");;
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        verify(bahmniPDFForm).addLabel("Label-1");
+    }
 }

@@ -3,6 +3,7 @@ package org.bahmni.module.bahmni.ie.apps.util.json.impl;
 import com.itextpdf.text.DocumentException;
 import org.bahmni.module.bahmni.ie.apps.util.json.Parser;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.impl.BahmniPDFFormImpl;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,28 @@ import java.io.IOException;
 @Service("jsonParser")
 public class ParserImpl implements Parser {
 
+    private final String RESOURCES = "resources";
+    private final String CONTROLS = "controls";
+    private final String VALUE = "value";
+    private final String TYPE = "type";
+    private final String LABEL = "label";
     private final String FORM_JSON = "formJson";
 
     @Override
     public void jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
         String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get("name");
         bahmniPDFForm.setTitle(title);
+        bahmniPDFForm.create();
+
+        JSONArray resources = (JSONArray) jsonObject.get(RESOURCES);
+        JSONObject resource = (JSONObject) resources.get(0);
+        JSONArray controls = (JSONArray) ((JSONObject) resource.get(VALUE)).get(CONTROLS);
+
+        for (int i = 0; i < controls.length(); i++) {
+            JSONObject control = (JSONObject) controls.get(i);
+            if (control.get(TYPE).equals(LABEL)) {
+                bahmniPDFForm.addLabel((String) control.get(VALUE));
+            }
+        }
     }
 }
