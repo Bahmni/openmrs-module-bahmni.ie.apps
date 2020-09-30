@@ -36,8 +36,8 @@ public class BahmniPDFFormImplTest {
     @Test
     public void shouldAddTextField() throws IOException {
         bahmniPDFForm.addTextField("random");
-        bahmniPDFForm.create();
-        PdfReader reader = new PdfReader("BahmniForm.pdf");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
 
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
@@ -47,8 +47,8 @@ public class BahmniPDFFormImplTest {
     @Test
     public void shouldAddNumericField() throws IOException {
         bahmniPDFForm.addNumericField("Weight", "kg");
-        bahmniPDFForm.create();
-        PdfReader reader = new PdfReader("BahmniForm.pdf");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
 
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
@@ -61,8 +61,8 @@ public class BahmniPDFFormImplTest {
         bahmniPDFForm.beginSection("MySection");
         bahmniPDFForm.addTextField("textField");
         bahmniPDFForm.endSection();
-        bahmniPDFForm.create();
-        PdfReader reader = new PdfReader("BahmniForm.pdf");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
 
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
@@ -72,8 +72,8 @@ public class BahmniPDFFormImplTest {
     @Test
     public void shouldAddDateTimeField() throws IOException {
         bahmniPDFForm.addDateTimeField("DateTime");
-        bahmniPDFForm.create();
-        PdfReader reader = new PdfReader("BahmniForm.pdf");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
 
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
