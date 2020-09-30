@@ -108,8 +108,8 @@ public class BahmniPDFFormImplTest {
     @Test
     public void shouldAddBooleanField() throws IOException {
         bahmniPDFForm.addBooleanField("Boolean");
-        bahmniPDFForm.create();
-        PdfReader reader = new PdfReader("BahmniForm.pdf");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
 
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
