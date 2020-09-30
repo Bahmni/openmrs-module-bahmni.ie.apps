@@ -34,9 +34,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     private void addTitle() throws DocumentException {
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Chunk chunk = new Chunk(title, font);
-        document.add(chunk);
+        html += "<center><h2>" + title + "</h2></center>";
     }
 
     @Override
