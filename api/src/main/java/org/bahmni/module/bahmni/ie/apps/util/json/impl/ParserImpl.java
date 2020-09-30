@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("jsonParser")
 public class ParserImpl implements Parser {
@@ -64,6 +66,14 @@ public class ParserImpl implements Parser {
         }
         if(datatype.equals("Boolean")){
             bahmniPDFForm.addBooleanField(controlLabel);
+        }
+        if(datatype.equals("Coded")){
+            JSONArray answers = (JSONArray) ((JSONObject) control.get(CONCEPT)).get("answers");
+            List<String> codes = new ArrayList();
+            for(int i = 0; i < answers.length(); i++){
+                codes.add((String) ((JSONObject) ((JSONObject) answers.get(i)).get("name")).get("display"));
+            }
+            bahmniPDFForm.addCodedield(controlLabel, codes);
         }
     }
 }

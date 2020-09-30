@@ -14,6 +14,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 
@@ -92,5 +94,18 @@ public class ParserImplTest {
         parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
 
         verify(bahmniPDFForm).addBooleanField("Hackathon-SetMember6-Boolean");
+    }
+
+    @Test
+    public void shouldParseJsonAndPrintObsControlOfTypeCoded() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-CODED_PARENT_7\",\"id\":\"7\",\"units\":\"\",\"type\":\"label\",\"value\":\"Hackathon-Coded_Parent\"},\"properties\":{\"mandatory\":false,\"notes\":false,\"addMore\":false,\"hideLabel\":false,\"multiSelect\":true},\"id\":\"7\",\"concept\":{\"name\":\"Hackathon-Coded_Parent\",\"datatype\":\"Coded\",\"conceptClass\":\"Misc\",\"answers\":[{\"name\":{\"display\":\"Hackathon-Coded_1\",\"name\":\"Hackathon-Coded_1\",\"locale\":\"en\",\"localePreferred\":true,\"conceptNameType\":\"FULLY_SPECIFIED\"},\"displayString\":\"Hackathon-Coded_1\",\"translationKey\":\"HACKATHON-CODED_1_7\"},{\"name\":{\"display\":\"Hackathon-Coded_2\",\"name\":\"Hackathon-Coded_2\",\"locale\":\"en\",\"localePreferred\":true,\"conceptNameType\":\"FULLY_SPECIFIED\"},\"names\":[{\"display\":\"Hackathon-Coded_2\",\"name\":\"Hackathon-Coded_2\",\"locale\":\"en\",\"localePreferred\":true,\"conceptNameType\":\"FULLY_SPECIFIED\"}],\"displayString\":\"Hackathon-Coded_2\",\"translationKey\":\"HACKATHON-CODED_2_7\"}],\"properties\":{\"allowDecimal\":null}},\"units\":null,\"hiNormal\":null,\"lowNormal\":null,\"hiAbsolute\":null,\"lowAbsolute\":null}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        List<String> codes = new ArrayList<String>();
+        codes.add("Hackathon-Coded_1");
+        codes.add("Hackathon-Coded_2");
+        verify(bahmniPDFForm).addCodedield("Hackathon-Coded_Parent", codes);
     }
 }
