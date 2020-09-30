@@ -57,6 +57,17 @@ public class BahmniPDFFormImplTest {
     }
 
     @Test
+    public void shouldAddLabel() throws IOException {
+        bahmniPDFForm.addLabel("randomLabel");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("randomLabel"));
+    }
+
+    @Test
     public void shouldAddNumericField() throws IOException {
         bahmniPDFForm.addNumericField("Weight", "kg");
         String filename = bahmniPDFForm.create();
