@@ -2,6 +2,7 @@ package org.bahmni.module.bahmni.ie.apps.util.json.impl;
 
 import com.itextpdf.text.DocumentException;
 import org.bahmni.module.bahmni.ie.apps.util.json.Parser;
+import org.bahmni.module.bahmni.ie.apps.util.pdf.BahmniPDFForm;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.impl.BahmniPDFFormImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,8 +34,12 @@ public class ParserImpl implements Parser {
         for (int i = 0; i < controls.length(); i++) {
             JSONObject control = (JSONObject) controls.get(i);
             if (control.get(TYPE).equals(LABEL)) {
-                bahmniPDFForm.addLabel((String) control.get(VALUE));
+                printLabelToPdf(bahmniPDFForm, control);
             }
         }
+    }
+
+    void printLabelToPdf(BahmniPDFForm bahmniPDFForm, JSONObject control){
+        bahmniPDFForm.addLabel((String) control.get(VALUE));
     }
 }
