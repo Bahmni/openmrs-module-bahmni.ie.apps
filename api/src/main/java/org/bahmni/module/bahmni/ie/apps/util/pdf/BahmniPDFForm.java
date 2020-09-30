@@ -10,7 +10,11 @@ public interface BahmniPDFForm {
 
     void addTextField(String textFieldLabel) throws IOException, DocumentException;
 
+    void addNumericField(String numericFieldLabel, String unit);
+
     void beginSection(String sectionTitle);
 
     void endSection();
+
+    void addDateTimeField(String dateTimeFieldLabel);
 }

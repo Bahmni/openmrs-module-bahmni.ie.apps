@@ -46,7 +46,7 @@ public class BahmniPDFFormImplTest {
 
     @Test
     public void shouldAddNumericField() throws IOException {
-        bahmniPDFForm.addNumericField("Weight","kg");
+        bahmniPDFForm.addNumericField("Weight", "kg");
         bahmniPDFForm.create();
         PdfReader reader = new PdfReader("BahmniForm.pdf");
 
@@ -67,5 +67,17 @@ public class BahmniPDFFormImplTest {
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
         assertThat(textFromPage, containsString("MySection"));
+    }
+
+    @Test
+    public void shouldAddDateTimeField() throws IOException {
+        bahmniPDFForm.addDateTimeField("DateTime");
+        bahmniPDFForm.create();
+        PdfReader reader = new PdfReader("BahmniForm.pdf");
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("DateTime"));
+        assertThat(textFromPage, containsString("AM/PM"));
     }
 }
