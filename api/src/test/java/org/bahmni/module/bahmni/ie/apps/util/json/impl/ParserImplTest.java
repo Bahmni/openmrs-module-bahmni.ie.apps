@@ -73,4 +73,14 @@ public class ParserImplTest {
 
         verify(bahmniPDFForm).addNumericField("Hackathon-SetMember2-Numeric","(unit)");
     }
+
+    @Test
+    public void shouldParseJsonAndPrintObsControlOfTypeDatetime() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-SETMEMBER5-DATETIME_5\",\"id\":\"5\",\"units\":\"\",\"type\":\"label\",\"value\":\"Hackathon-SetMember5-DateTime\"},\"properties\":{\"mandatory\":false,\"notes\":false,\"addMore\":false,\"hideLabel\":false},\"id\":\"5\",\"concept\":{\"name\":\"Hackathon-SetMember5-DateTime\",\"datatype\":\"Datetime\",\"conceptClass\":\"Misc\"},\"units\":null,\"hiNormal\":null,\"lowNormal\":null,\"hiAbsolute\":null,\"lowAbsolute\":null}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        verify(bahmniPDFForm).addDateTimeField("Hackathon-SetMember5-DateTime");
+    }
 }

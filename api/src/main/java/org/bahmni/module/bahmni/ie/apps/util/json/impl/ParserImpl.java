@@ -59,5 +59,8 @@ public class ParserImpl implements Parser {
             String unit = (String) label.get("units");
             bahmniPDFForm.addNumericField(controlLabel, unit);
         }
+        if(datatype.equals("Datetime")){
+            bahmniPDFForm.addDateTimeField(controlLabel);
+        }
     }
 }
