@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 public class BahmniPDFFormImpl implements BahmniPDFForm {
     private final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
@@ -41,8 +42,9 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     private String createDirsAndGetFilePath() throws IOException {
         String pathPrefix = System.getProperty(BAHMNI_FORM_PATH_PDF, DEFAULT_PDF_FOLDER_PATH);
-        String filename = "BahmniForm.pdf";
-        String fullPath = pathPrefix + filename;
+        String filename = UUID.randomUUID().toString();
+        String pathSuffix = ".pdf";
+        String fullPath = pathPrefix + filename + pathSuffix;
 
         Files.createDirectories(Paths.get(pathPrefix));
 
