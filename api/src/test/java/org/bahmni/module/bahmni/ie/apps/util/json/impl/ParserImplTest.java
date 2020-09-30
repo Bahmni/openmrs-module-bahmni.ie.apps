@@ -63,4 +63,14 @@ public class ParserImplTest {
 
         verify(bahmniPDFForm).addTextField("Hackathon-SetMember1-Text");
     }
+
+    @Test
+    public void shouldParseJsonAndPrintObsControlOfTypeNumeric() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-SETMEMBER2-NUMERIC_3\",\"id\":\"3\",\"units\":\"(unit)\",\"type\":\"label\",\"value\":\"Hackathon-SetMember2-Numeric\"},\"properties\":{\"mandatory\":true,\"notes\":false,\"addMore\":false,\"hideLabel\":false},\"id\":\"3\",\"concept\":{\"name\":\"Hackathon-SetMember2-Numeric\",\"uuid\":\"e667b589-c1e2-4cfe-b1ca-d390aff69d12\",\"datatype\":\"Numeric\",\"conceptClass\":\"Misc\"},\"units\":\"unit\",\"hiNormal\":9,\"lowNormal\":5,\"hiAbsolute\":10,\"lowAbsolute\":1}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        verify(bahmniPDFForm).addNumericField("Hackathon-SetMember2-Numeric","(unit)");
+    }
 }

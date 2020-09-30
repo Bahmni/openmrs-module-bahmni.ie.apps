@@ -54,5 +54,10 @@ public class ParserImpl implements Parser {
         if(datatype.equals("Text")){
             bahmniPDFForm.addTextField(controlLabel);
         }
+        if(datatype.equals("Numeric")){
+            JSONObject label = (JSONObject) control.get(LABEL);
+            String unit = (String) label.get("units");
+            bahmniPDFForm.addNumericField(controlLabel, unit);
+        }
     }
 }
