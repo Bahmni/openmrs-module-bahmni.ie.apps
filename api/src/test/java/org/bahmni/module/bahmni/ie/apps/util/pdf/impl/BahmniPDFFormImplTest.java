@@ -8,8 +8,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(PowerMockRunner.class)
 public class BahmniPDFFormImplTest {
-    String title = "Bahmni Form";
     BahmniPDFFormImpl bahmniPDFForm;
 
     @BeforeClass
@@ -36,14 +32,19 @@ public class BahmniPDFFormImplTest {
 
     @Before
     public void setUp() throws IOException, DocumentException {
-        bahmniPDFForm = new BahmniPDFFormImpl(title);
+        bahmniPDFForm = new BahmniPDFFormImpl();
     }
 
     @Test
-    public void shouldCreatePdfFile() throws IOException {
+    public void shouldCreatePdfFileWithTitle() throws IOException {
+        bahmniPDFForm.setTitle("MyTitle");
         String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
 
         assertThat(new File(filename).exists(), is(true));
+        assertThat(textFromPage, containsString("MyTitle"));
     }
 
     @Test

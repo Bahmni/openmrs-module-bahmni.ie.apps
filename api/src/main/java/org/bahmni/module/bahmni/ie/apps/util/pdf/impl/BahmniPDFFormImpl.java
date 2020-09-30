@@ -18,23 +18,22 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     private static final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
     private static final String BAHMNI_FORM_PATH_PDF = "bahmni.pdf.directory";
 
-    private final String title;
+    private String title;
     private final Document document;
     private final PdfWriter writer;
     private final String filename;
     private String html = "";
 
-    public BahmniPDFFormImpl(String title) throws IOException, DocumentException {
-        this.title = title;
+    public BahmniPDFFormImpl() throws IOException, DocumentException {
         filename = createDirsAndGetFilePath();
         document = new Document();
         writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
         document.open();
-        addTitle();
     }
 
     @Override
     public String create() throws IOException {
+        addTitle();
         XMLWorkerHelper.getInstance().parseXHtml(writer, document,
                 new ByteArrayInputStream(html.getBytes()));
         document.close();
@@ -53,7 +52,14 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     private void addTitle() {
-        html += "<center><h2>" + title + "</h2></center>";
+        if (title != null) {
+            html = "<center><h2>" + title + "</h2></center>" + html;
+        }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

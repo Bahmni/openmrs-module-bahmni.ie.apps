@@ -9,6 +9,8 @@ public interface BahmniPDFForm {
 
     String create() throws IOException, DocumentException;
 
+    void setTitle(String title);
+
     void addLabel(String labelText);
 
     void addTextField(String textFieldLabel) throws IOException, DocumentException;
