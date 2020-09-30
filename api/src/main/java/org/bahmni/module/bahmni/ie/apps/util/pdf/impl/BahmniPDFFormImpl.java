@@ -43,4 +43,9 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     public void addTextField(String textFieldLabel) {
         html += "<table><tr><td style=\"width: 30%;\">" + textFieldLabel + "</td><td style=\"width: 60%; border: 3px solid black; height: 50px;\"></td></tr></table>";
     }
+
+    public void addNumericField(String numericFieldLabel, String unit) {
+        String blank = "______________";
+        html += "<table><tr><td style=\"width: 30%;\">" + numericFieldLabel + "</td><td>" + blank + "</td><td style=\"width: 30%;\">" + unit +"</td></tr></table>";
+    }
 }

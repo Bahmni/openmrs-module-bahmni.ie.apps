@@ -43,4 +43,16 @@ public class BahmniPDFFormImplTest {
 
         assertThat(textFromPage, containsString("random"));
     }
+
+    @Test
+    public void shouldAddNumericField() throws IOException {
+        bahmniPDFForm.addNumericField("Weight","kg");
+        bahmniPDFForm.create();
+        PdfReader reader = new PdfReader("BahmniForm.pdf");
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("Weight"));
+        assertThat(textFromPage, containsString("kg"));
+    }
 }
