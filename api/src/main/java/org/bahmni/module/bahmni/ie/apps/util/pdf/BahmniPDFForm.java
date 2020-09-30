@@ -3,6 +3,7 @@ package org.bahmni.module.bahmni.ie.apps.util.pdf;
 import com.itextpdf.text.DocumentException;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface BahmniPDFForm {
 
@@ -21,4 +22,6 @@ public interface BahmniPDFForm {
     void addDateTimeField(String dateTimeFieldLabel);
 
     void addBooleanField(String booleanFieldLabel);
+
+    void addCodedield(String codedFieldLabel, List<String> codes);
 }

@@ -11,11 +11,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 public class BahmniPDFFormImpl implements BahmniPDFForm {
-    private final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
-    private final String BAHMNI_FORM_PATH_PDF = "bahmni.pdf.directory";
+    private static final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
+    private static final String BAHMNI_FORM_PATH_PDF = "bahmni.pdf.directory";
 
     private final String title;
     private final Document document;
@@ -68,7 +69,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addNumericField(String numericFieldLabel, String unit) {
         String blank = "______________";
-        html += "<table><tr><td style=\"width: 30%;\">" + numericFieldLabel + "</td><td>" + blank + "</td><td style=\"width: 30%;\">" + unit +"</td></tr></table>";
+        html += "<table><tr><td style=\"width: 30%;\">" + numericFieldLabel + "</td><td>" + blank + "</td><td style=\"width: 30%;\">" + unit + "</td></tr></table>";
     }
 
     @Override
@@ -85,12 +86,34 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
         String dateTimeblank = "__/___/____ , __:__";
-        html += "<table><tr><td style=\"width: 30%;\">" + dateTimeFieldLabel + "</td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" +"</td></tr></table>";
+        html += "<table><tr><td style=\"width: 30%;\">" + dateTimeFieldLabel + "</td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
     }
 
     @Override
     public void addBooleanField(String booleanFieldLabel) {
         String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
         html += "<table><tr><td style=\"width: 30%;\">" + booleanFieldLabel + "</td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td> </tr></table>";
+    }
+
+    @Override
+    public void addCodedield(String codedFieldLabel, List<String> codes) {
+        html += "<table><tr><td style=\"width: 30%;\">" + codedFieldLabel + "</td>" + generateDynamicCode(codes) + "</tr></table>";
+    }
+
+    private String generateDynamicCode(List<String> codes) {
+        String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
+        StringBuilder codeHtml = new StringBuilder();
+        for (int index = 0; index < codes.size(); index++) {
+            if (index % 2 == 0) {
+                if (index != 0) {
+                    codeHtml.append("<td></td>");
+                }
+                codeHtml.append("<td style=").append(checkBoxStyle).append("> </td> <td>").append(codes.get(index)).append("</td>");
+            } else {
+                codeHtml.append("<td style=").append(checkBoxStyle).append("> </td> <td>").append(codes.get(index)).append("</td>");
+                codeHtml.append("</tr><tr>");
+            }
+        }
+        return codeHtml.toString();
     }
 }

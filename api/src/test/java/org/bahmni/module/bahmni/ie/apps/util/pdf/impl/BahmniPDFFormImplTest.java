@@ -13,6 +13,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -115,5 +116,20 @@ public class BahmniPDFFormImplTest {
 
         assertThat(textFromPage, containsString("Yes"));
         assertThat(textFromPage, containsString("No"));
+    }
+
+    @Test
+    public void shouldAddCodedField() throws IOException {
+        bahmniPDFForm.addCodedield("Coded", Arrays.asList("code1", "code2", "code3", "code4", "code5"));
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("code1"));
+        assertThat(textFromPage, containsString("code2"));
+        assertThat(textFromPage, containsString("code3"));
+        assertThat(textFromPage, containsString("code4"));
+        assertThat(textFromPage, containsString("code5"));
     }
 }
