@@ -87,4 +87,10 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         String dateTimeblank = "__/___/____ , __:__";
         html += "<table><tr><td style=\"width: 30%;\">" + dateTimeFieldLabel + "</td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" +"</td></tr></table>";
     }
+
+    @Override
+    public void addBooleanField(String booleanFieldLabel) {
+        String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
+        html += "<table><tr><td style=\"width: 30%;\">" + booleanFieldLabel + "</td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td> </tr></table>";
+    }
 }

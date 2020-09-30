@@ -103,4 +103,17 @@ public class BahmniPDFFormImplTest {
         assertThat(textFromPage, containsString("DateTime"));
         assertThat(textFromPage, containsString("AM/PM"));
     }
+
+
+    @Test
+    public void shouldAddBooleanField() throws IOException {
+        bahmniPDFForm.addBooleanField("Boolean");
+        bahmniPDFForm.create();
+        PdfReader reader = new PdfReader("BahmniForm.pdf");
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("Yes"));
+        assertThat(textFromPage, containsString("No"));
+    }
 }
