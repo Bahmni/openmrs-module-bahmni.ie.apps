@@ -27,7 +27,7 @@ public class BahmniPDFFormImplTest {
     }
 
     @Test
-    public void shouldCreatePdfFile() {
+    public void shouldCreatePdfFile() throws IOException {
         String filename = bahmniPDFForm.create();
 
         assertThat(new File(filename).exists(), is(true));

@@ -15,6 +15,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     private final Document document;
     private final PdfWriter writer;
     private final String filename = "BahmniForm.pdf";
+    private String html = "";
 
     public BahmniPDFFormImpl(String title) throws FileNotFoundException, DocumentException {
         this.title = title;
@@ -25,7 +26,9 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     @Override
-    public String create() {
+    public String create() throws IOException {
+        XMLWorkerHelper.getInstance().parseXHtml(writer, document,
+                new ByteArrayInputStream(html.getBytes()));
         document.close();
         return filename;
     }
@@ -37,9 +40,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     @Override
-    public void addTextField(String textFieldLabel) throws IOException {
-        String html = "<table><tr><td style=\"width: 30%;\">" + textFieldLabel + "</td><td style=\"width: 60%; border: 3px solid black; height: 50px;\"></td></tr></table>";
-        XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-                new ByteArrayInputStream(html.getBytes()));
+    public void addTextField(String textFieldLabel) {
+        html += "<table><tr><td style=\"width: 30%;\">" + textFieldLabel + "</td><td style=\"width: 60%; border: 3px solid black; height: 50px;\"></td></tr></table>";
     }
 }
