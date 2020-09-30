@@ -83,4 +83,14 @@ public class ParserImplTest {
 
         verify(bahmniPDFForm).addDateTimeField("Hackathon-SetMember5-DateTime");
     }
+
+    @Test
+    public void shouldParseJsonAndPrintObsControlOfTypeBoolean() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"options\":[{\"name\":\"Yes\",\"translationKey\":\"BOOLEAN_YES\",\"value\":true},{\"name\":\"No\",\"translationKey\":\"BOOLEAN_NO\",\"value\":false}],\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-SETMEMBER6-BOOLEAN_6\",\"id\":\"6\",\"units\":\"\",\"type\":\"label\",\"value\":\"Hackathon-SetMember6-Boolean\"},\"properties\":{\"mandatory\":true,\"notes\":true,\"addMore\":false,\"hideLabel\":false},\"id\":\"6\",\"concept\":{\"name\":\"Hackathon-SetMember6-Boolean\",\"datatype\":\"Boolean\",\"conceptClass\":\"Misc\"},\"units\":null,\"hiNormal\":null,\"lowNormal\":null,\"hiAbsolute\":null,\"lowAbsolute\":null}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        verify(bahmniPDFForm).addBooleanField("Hackathon-SetMember6-Boolean");
+    }
 }

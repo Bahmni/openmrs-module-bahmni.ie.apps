@@ -62,5 +62,8 @@ public class ParserImpl implements Parser {
         if(datatype.equals("Datetime")){
             bahmniPDFForm.addDateTimeField(controlLabel);
         }
+        if(datatype.equals("Boolean")){
+            bahmniPDFForm.addBooleanField(controlLabel);
+        }
     }
 }
