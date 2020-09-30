@@ -53,4 +53,14 @@ public class ParserImplTest {
 
         verify(bahmniPDFForm).addLabel("Label-1");
     }
+
+    @Test
+    public void shouldParseJsonAndPrintObsControlOfTypeText() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-SETMEMBER1-TEXT_2\",\"id\":\"2\",\"units\":\"\",\"type\":\"label\",\"value\":\"Hackathon-SetMember1-Text\"},\"properties\":{\"mandatory\":false,\"notes\":false,\"addMore\":false,\"hideLabel\":false},\"id\":\"2\",\"concept\":{\"name\":\"Hackathon-SetMember1-Text\",\"datatype\":\"Text\",\"conceptClass\":\"Misc\"},\"units\":null,\"hiNormal\":null,\"lowNormal\":null,\"hiAbsolute\":null,\"lowAbsolute\":null}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);
+
+        verify(bahmniPDFForm).addTextField("Hackathon-SetMember1-Text");
+    }
 }

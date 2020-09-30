@@ -20,6 +20,8 @@ public class ParserImpl implements Parser {
     private final String TYPE = "type";
     private final String LABEL = "label";
     private final String FORM_JSON = "formJson";
+    private final String OBS_CONTROL = "obsControl";
+    private final String CONCEPT = "concept";
 
     @Override
     public void jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
@@ -36,10 +38,21 @@ public class ParserImpl implements Parser {
             if (control.get(TYPE).equals(LABEL)) {
                 printLabelToPdf(bahmniPDFForm, control);
             }
+            if (control.get(TYPE).equals(OBS_CONTROL)) {
+                printObsControlToPdf(bahmniPDFForm, control);
+            }
         }
     }
 
     void printLabelToPdf(BahmniPDFForm bahmniPDFForm, JSONObject control){
         bahmniPDFForm.addLabel((String) control.get(VALUE));
+    }
+
+    void printObsControlToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control){
+        String datatype = (String) ((JSONObject) control.get(CONCEPT)).get("datatype");
+        String controlLabel = (String) ((JSONObject) control.get(CONCEPT)).get("name");
+        if(datatype.equals("Text")){
+            bahmniPDFForm.addTextField(controlLabel);
+        }
     }
 }
