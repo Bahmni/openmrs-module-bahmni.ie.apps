@@ -24,6 +24,7 @@ public class ParserImpl implements Parser {
     private final String FORM_JSON = "formJson";
     private final String OBS_CONTROL = "obsControl";
     private final String CONCEPT = "concept";
+    private final String SECTION = "section";
 
     @Override
     public void jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
@@ -42,6 +43,9 @@ public class ParserImpl implements Parser {
             }
             if (control.get(TYPE).equals(OBS_CONTROL)) {
                 printObsControlToPdf(bahmniPDFForm, control);
+            }
+            if (control.get(TYPE).equals(SECTION)) {
+                printSectionToPdf(bahmniPDFForm, control);
             }
         }
     }
@@ -75,5 +79,26 @@ public class ParserImpl implements Parser {
             }
             bahmniPDFForm.addCodedield(controlLabel, codes);
         }
+    }
+
+    void printSectionToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control){
+        String sectionTitle = (String) ((JSONObject) control.get(LABEL)).get(VALUE);
+        bahmniPDFForm.beginSection(sectionTitle);
+        JSONArray sectionControls = (JSONArray) control.get(CONTROLS);
+
+        for (int i = 0; i < sectionControls.length(); i++) {
+            JSONObject sectionControl = (JSONObject) sectionControls.get(i);
+            if (sectionControl.get(TYPE).equals(LABEL)) {
+                printLabelToPdf(bahmniPDFForm, sectionControl);
+            }
+            if (sectionControl.get(TYPE).equals(OBS_CONTROL)) {
+                printObsControlToPdf(bahmniPDFForm, sectionControl);
+            }
+            if (sectionControl.get(TYPE).equals(SECTION)) {
+                printSectionToPdf(bahmniPDFForm, sectionControl);
+            }
+        }
+
+        bahmniPDFForm.endSection();
     }
 }
