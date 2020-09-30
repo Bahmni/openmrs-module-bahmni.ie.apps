@@ -33,7 +33,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         return filename;
     }
 
-    private void addTitle() throws DocumentException {
+    private void addTitle() {
         html += "<center><h2>" + title + "</h2></center>";
     }
 
@@ -45,5 +45,16 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     public void addNumericField(String numericFieldLabel, String unit) {
         String blank = "______________";
         html += "<table><tr><td style=\"width: 30%;\">" + numericFieldLabel + "</td><td>" + blank + "</td><td style=\"width: 30%;\">" + unit +"</td></tr></table>";
+    }
+
+    @Override
+    public void beginSection(String sectionTitle) {
+        html += "<h4>" + sectionTitle + "</h4>";
+        html += "<table style=\"width: 100%; border: 1px solid black;\"><tr><td>";
+    }
+
+    @Override
+    public void endSection() {
+        html += "</td></tr></table>";
     }
 }

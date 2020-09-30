@@ -55,4 +55,17 @@ public class BahmniPDFFormImplTest {
         assertThat(textFromPage, containsString("Weight"));
         assertThat(textFromPage, containsString("kg"));
     }
+
+    @Test
+    public void shouldAddSection() throws IOException {
+        bahmniPDFForm.beginSection("MySection");
+        bahmniPDFForm.addTextField("textField");
+        bahmniPDFForm.endSection();
+        bahmniPDFForm.create();
+        PdfReader reader = new PdfReader("BahmniForm.pdf");
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("MySection"));
+    }
 }
