@@ -103,7 +103,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addCodedield(String codedFieldLabel, List<String> codes) {
-        html += "<table><tr><td style=\"width: 30%;\">" + codedFieldLabel + "</td>" + generateDynamicCode(codes) + "</tr></table>";
+        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 30%;\">" + codedFieldLabel + "</td>" + generateDynamicCode(codes) + "</tr></table>";
     }
 
     private String generateDynamicCode(List<String> codes) {
