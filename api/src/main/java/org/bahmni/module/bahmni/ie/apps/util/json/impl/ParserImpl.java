@@ -27,7 +27,7 @@ public class ParserImpl implements Parser {
     private final String SECTION = "section";
 
     @Override
-    public void jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
+    public String jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
         String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get("name");
         bahmniPDFForm.setTitle(title);
         bahmniPDFForm.create();
@@ -48,6 +48,8 @@ public class ParserImpl implements Parser {
                 printSectionToPdf(bahmniPDFForm, control);
             }
         }
+
+        return bahmniPDFForm.create();
     }
 
     void printLabelToPdf(BahmniPDFForm bahmniPDFForm, JSONObject control){

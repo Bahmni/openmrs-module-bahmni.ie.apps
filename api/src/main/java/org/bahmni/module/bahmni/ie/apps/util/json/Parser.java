@@ -8,5 +8,5 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface Parser {
-    void jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException;
+    String jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException;
 }
