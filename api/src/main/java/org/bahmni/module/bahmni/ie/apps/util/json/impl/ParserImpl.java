@@ -30,7 +30,6 @@ public class ParserImpl implements Parser {
     public String jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
         String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get("name");
         bahmniPDFForm.setTitle(title);
-        bahmniPDFForm.create();
 
         JSONArray resources = (JSONArray) jsonObject.get(RESOURCES);
         JSONObject resource = (JSONObject) resources.get(0);
