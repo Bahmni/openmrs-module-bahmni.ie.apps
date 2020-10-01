@@ -121,7 +121,7 @@ public class BahmniPDFFormImplTest {
 
     @Test
     public void shouldAddCodedField() throws IOException {
-        bahmniPDFForm.addCodedield("Coded", Arrays.asList("code1", "code2", "code3", "code4", "code5"));
+        bahmniPDFForm.addCodedField("Coded", Arrays.asList("code1", "code2", "code3", "code4", "code5"));
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 

@@ -25,5 +25,5 @@ public interface BahmniPDFForm {
 
     void addBooleanField(String booleanFieldLabel);
 
-    void addCodedield(String codedFieldLabel, List<String> codes);
+    void addCodedField(String codedFieldLabel, List<String> codes);
 }

@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.impl.BahmniPDFFormImpl;
 import org.json.JSONObject;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,7 +105,7 @@ public class ParserImplTest {
         List<String> codes = new ArrayList<String>();
         codes.add("Hackathon-Coded_1");
         codes.add("Hackathon-Coded_2");
-        verify(bahmniPDFForm).addCodedield("Hackathon-Coded_Parent", codes);
+        verify(bahmniPDFForm).addCodedField("Hackathon-Coded_Parent", codes);
     }
 
     @Test
@@ -120,7 +119,7 @@ public class ParserImplTest {
         codes.add("Hackathon-Coded_1");
         codes.add("Hackathon-Coded_2");
         verify(bahmniPDFForm).beginSection("Section-1");
-        verify(bahmniPDFForm).addCodedield("Hackathon-Coded_Parent", codes);
+        verify(bahmniPDFForm).addCodedField("Hackathon-Coded_Parent", codes);
         verify(bahmniPDFForm).endSection();
     }
 }

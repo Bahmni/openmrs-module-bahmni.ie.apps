@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,7 @@ public class ParserImpl implements Parser {
             for(int i = 0; i < answers.length(); i++){
                 codes.add((String) ((JSONObject) ((JSONObject) answers.get(i)).get("name")).get("display"));
             }
-            bahmniPDFForm.addCodedield(controlLabel, codes);
+            bahmniPDFForm.addCodedField(controlLabel, codes);
         }
     }
 
