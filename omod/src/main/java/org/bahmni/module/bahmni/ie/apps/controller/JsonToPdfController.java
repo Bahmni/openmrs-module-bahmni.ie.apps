@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class JsonToPdfController {
@@ -23,11 +25,13 @@ public class JsonToPdfController {
 
     @RequestMapping(value = baseUrl + "/jsonToPdf", method = RequestMethod.POST)
     @ResponseBody
-    public String convert(@RequestBody String string) throws IOException, DocumentException {
+    public Map<String,String> convert(@RequestBody String string) throws IOException, DocumentException {
         JSONObject jsonFile = new JSONObject(string);
         BahmniPDFFormImpl bahmniPDFForm = new BahmniPDFFormImpl();
         String generatedPdfDirPath = new String("/home/bahmni/pdf/");
         String gerneratedPdfName = parser.jsonToPdfParser(bahmniPDFForm, jsonFile).substring(generatedPdfDirPath.length());
-        return gerneratedPdfName;
+        Map<String,String> response = new HashMap<>();
+        response.put("pdfName",gerneratedPdfName);
+        return response;
     }
 }
