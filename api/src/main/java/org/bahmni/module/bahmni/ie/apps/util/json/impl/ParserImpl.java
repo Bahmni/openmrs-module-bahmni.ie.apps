@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 import static org.bahmni.module.bahmni.ie.apps.util.json.impl.Constants.*;
-import static org.bahmni.module.bahmni.ie.apps.util.json.impl.controlparser.ControlParser.stringToControlMap;
+import static org.bahmni.module.bahmni.ie.apps.util.json.impl.controls.mapper.ControlMapper.stringToControlMap;
 
 @Service("jsonParser")
 public class ParserImpl implements Parser {

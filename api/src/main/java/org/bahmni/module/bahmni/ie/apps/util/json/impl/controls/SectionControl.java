@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import static org.bahmni.module.bahmni.ie.apps.util.json.impl.Constants.*;
-import static org.bahmni.module.bahmni.ie.apps.util.json.impl.controlparser.ControlParser.stringToControlMap;
+import static org.bahmni.module.bahmni.ie.apps.util.json.impl.controls.mapper.ControlMapper.stringToControlMap;
 
 public class SectionControl implements IControl {
 
