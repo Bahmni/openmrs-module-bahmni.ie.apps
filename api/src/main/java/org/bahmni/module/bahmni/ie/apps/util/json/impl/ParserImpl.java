@@ -1,6 +1,5 @@
 package org.bahmni.module.bahmni.ie.apps.util.json.impl;
 
-import com.itextpdf.text.DocumentException;
 import org.bahmni.module.bahmni.ie.apps.util.json.Parser;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.BahmniPDFForm;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.impl.BahmniPDFFormImpl;
@@ -12,22 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.bahmni.module.bahmni.ie.apps.util.json.impl.Constants.*;
+
 @Service("jsonParser")
 public class ParserImpl implements Parser {
 
-    private final String RESOURCES = "resources";
-    private final String CONTROLS = "controls";
-    private final String VALUE = "value";
-    private final String TYPE = "type";
-    private final String LABEL = "label";
-    private final String FORM_JSON = "formJson";
-    private final String OBS_CONTROL = "obsControl";
-    private final String CONCEPT = "concept";
-    private final String SECTION = "section";
-
     @Override
-    public String jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException, DocumentException{
-        String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get("name");
+    public String jsonToPdfParser(BahmniPDFFormImpl bahmniPDFForm, JSONObject jsonObject) throws IOException {
+        String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get(NAME);
         bahmniPDFForm.setTitle(title);
 
         JSONArray resources = (JSONArray) jsonObject.get(RESOURCES);
@@ -46,42 +37,41 @@ public class ParserImpl implements Parser {
                 printSectionToPdf(bahmniPDFForm, control);
             }
         }
-
         return bahmniPDFForm.create();
     }
 
-    void printLabelToPdf(BahmniPDFForm bahmniPDFForm, JSONObject control){
+    void printLabelToPdf(BahmniPDFForm bahmniPDFForm, JSONObject control) {
         bahmniPDFForm.addLabel((String) control.get(VALUE));
     }
 
-    void printObsControlToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control){
-        String datatype = (String) ((JSONObject) control.get(CONCEPT)).get("datatype");
-        String controlLabel = (String) ((JSONObject) control.get(CONCEPT)).get("name");
-        if(datatype.equals("Text")){
+    void printObsControlToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control) {
+        String datatype = (String) ((JSONObject) control.get(CONCEPT)).get(DATATYPE);
+        String controlLabel = (String) ((JSONObject) control.get(CONCEPT)).get(NAME);
+        if (datatype.equals(TEXT)) {
             bahmniPDFForm.addTextField(controlLabel);
         }
-        if(datatype.equals("Numeric")){
+        if (datatype.equals(NUMERIC)) {
             JSONObject label = (JSONObject) control.get(LABEL);
-            String unit = (String) label.get("units");
+            String unit = (String) label.get(UNITS);
             bahmniPDFForm.addNumericField(controlLabel, unit);
         }
-        if(datatype.equals("Datetime")){
+        if (datatype.equals(DATE_TIME)) {
             bahmniPDFForm.addDateTimeField(controlLabel);
         }
-        if(datatype.equals("Boolean")){
+        if (datatype.equals(BOOLEAN)) {
             bahmniPDFForm.addBooleanField(controlLabel);
         }
-        if(datatype.equals("Coded")){
-            JSONArray answers = (JSONArray) ((JSONObject) control.get(CONCEPT)).get("answers");
-            List<String> codes = new ArrayList();
-            for(int i = 0; i < answers.length(); i++){
-                codes.add((String) ((JSONObject) ((JSONObject) answers.get(i)).get("name")).get("display"));
+        if (datatype.equals(CODED)) {
+            JSONArray answers = (JSONArray) ((JSONObject) control.get(CONCEPT)).get(ANSWERS);
+            List<String> codes = new ArrayList<>();
+            for (int i = 0; i < answers.length(); i++) {
+                codes.add((String) ((JSONObject) ((JSONObject) answers.get(i)).get(NAME)).get(DISPLAY));
             }
             bahmniPDFForm.addCodedField(controlLabel, codes);
         }
     }
 
-    void printSectionToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control){
+    void printSectionToPdf(BahmniPDFFormImpl bahmniPDFForm, JSONObject control) {
         String sectionTitle = (String) ((JSONObject) control.get(LABEL)).get(VALUE);
         bahmniPDFForm.beginSection(sectionTitle);
         JSONArray sectionControls = (JSONArray) control.get(CONTROLS);
@@ -98,7 +88,6 @@ public class ParserImpl implements Parser {
                 printSectionToPdf(bahmniPDFForm, sectionControl);
             }
         }
-
         bahmniPDFForm.endSection();
     }
 }
