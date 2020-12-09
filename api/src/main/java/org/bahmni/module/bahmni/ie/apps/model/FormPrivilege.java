@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
-public class FormPrivilege extends BaseOpenmrsData implements Serializable {
+public class FormPrivilege extends BaseOpenmrsObject {
 
     private Integer formId;
     private String privilegeName;
