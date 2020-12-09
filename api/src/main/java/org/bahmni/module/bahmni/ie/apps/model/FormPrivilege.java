@@ -1,6 +1,7 @@
 package org.bahmni.module.bahmni.ie.apps.model;
 
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.customdatatype.CustomValueDescriptor;
 
@@ -9,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
-public class FormPrivilege extends BaseOpenmrsObject {
+public class FormPrivilege extends BaseOpenmrsMetadata {
 
     private Integer formId;
     private String privilegeName;
