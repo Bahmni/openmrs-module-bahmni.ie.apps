@@ -10,21 +10,15 @@
                 <param name="sequence">form_privilege_id_seq</param>
             </generator>
         </id>
-
         <property name="formId" type="java.lang.Integer" column="formId" length="1000"/>
         <property name="formVersion" type="java.lang.String" column="formVersion" length="1000"/>
         <property name="privilegeName" type="java.lang.String" column="privilegeName" length="1000"/>
         <property name="editable" type="java.lang.Boolean" column="editable" length="1" not-null="true" />
         <property name="viewable" type="java.lang.Boolean" column="viewable" length="1" not-null="true" />
-
-
-        <property name="dateCreated" type="java.util.Date" column="date_created"/>
-        <property name="dateChanged" type="java.util.Date" column="date_changed"/>
+        <many-to-one name="creator" class="org.openmrs.User" column="creator" not-null="true"/>
+        <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19"/>
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by" />
         <property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true"/>
-        <property name="voided" type="java.lang.Boolean" column="voided" length="1" not-null="true" />
-        <property name="dateVoided" type="java.util.Date" column="date_voided" length="19" />
-        <property name="voidReason" type="java.lang.String" column="void_reason" length="255" />
-
-
     </class>
 </hibernate-mapping>

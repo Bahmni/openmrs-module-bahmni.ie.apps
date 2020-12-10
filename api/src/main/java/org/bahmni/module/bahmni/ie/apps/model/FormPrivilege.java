@@ -8,14 +8,74 @@ import org.openmrs.customdatatype.CustomValueDescriptor;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-public class FormPrivilege extends BaseOpenmrsMetadata {
+public class FormPrivilege extends BaseOpenmrsObject implements java.io.Serializable {
 
     private Integer formId;
     private String privilegeName;
     private Boolean editable;
     private Boolean viewable;
+    private String creator;
+    private Date dateCreated;
+    private Date dateChanged;
+    private String changedBy;
+    private String uuid;
+
+
+public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion) {
+
+        this.formId = formId;
+        this.privilegeName = privilegeName;
+        this.editable = editable;
+        this.viewable = viewable;
+        this.formVersion = formVersion;
+
+    }
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
+    public String getChangedBy() {
+        return changedBy;
+    }
+
+    public void setChangedBy(String changedBy) {
+        this.changedBy = changedBy;
+    }
+
+    @Override
+    public String getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    
 
     public String getFormVersion() {
         return formVersion;
@@ -30,15 +90,7 @@ public class FormPrivilege extends BaseOpenmrsMetadata {
 
     public FormPrivilege() {
     }
-    public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion) {
-
-        this.formId = formId;
-        this.privilegeName = privilegeName;
-        this.editable = editable;
-        this.viewable = viewable;
-        this.formVersion = formVersion;
-
-    }
+    
     public Integer getForm_privilege_id() {
         return form_privilege_id;
     }
