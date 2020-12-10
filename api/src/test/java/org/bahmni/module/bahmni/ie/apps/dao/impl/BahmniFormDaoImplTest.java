@@ -62,6 +62,7 @@ public class BahmniFormDaoImplTest {
         PowerMockito.when(query.setResultTransformer(any(ResultTransformer.class))).thenReturn(query);
         PowerMockito.when(query.list()).thenReturn(new ArrayList());
         bahmniFormDao.formsWithNameTransaltionsFor(null,false,false);
+
         verify(session).createQuery( "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name, F.formId as id, " +
                 "F.uuid as uuid, F.version as version" +
                 ", F.published as published from FormResource FR right outer join FR.form F " +
