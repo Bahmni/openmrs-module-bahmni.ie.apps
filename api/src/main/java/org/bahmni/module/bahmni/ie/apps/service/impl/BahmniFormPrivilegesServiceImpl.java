@@ -6,6 +6,7 @@ import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormPrivilegeDao;
 import org.bahmni.module.bahmni.ie.apps.model.FormPrivilege;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormPrivilegesService;
 
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -42,6 +43,7 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
                 originalFormPrivilege.setPrivilegeName(toPersistFormPrivilege.getPrivilegeName());
                 originalFormPrivilege.setEditable(toPersistFormPrivilege.getEditable());
                 originalFormPrivilege.setViewable(toPersistFormPrivilege.getViewable());
+                //originalFormPrivilege.setUuid(toPersistFormPrivilege.getUuid());
                 toPersistFormPrivilege = originalFormPrivilege;
             }
 
@@ -71,6 +73,7 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
                     if (tempEntrySet.getKey().toString().equalsIgnoreCase("formId")) {
                         tempPrivilege.setFormId((Integer) temp.get("formId"));
                         formId = (Integer) temp.get("formId");
+
                     } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("editable")) {
                         tempPrivilege.setEditable((Boolean) temp.get("editable"));
                     } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("privilegeName")) {

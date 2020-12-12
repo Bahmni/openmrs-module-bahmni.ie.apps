@@ -1,5 +1,6 @@
 package org.bahmni.module.bahmni.ie.apps;
 
+import org.bahmni.module.bahmni.ie.apps.model.FormPrivilege;
 import org.openmrs.Form;
 import org.openmrs.FormResource;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
@@ -46,6 +47,15 @@ public class MotherForm {
 			setUuid(uuid);
 			setValue(valueReference);
 			setForm(bahmniForm);
+		}};
+	}
+	public static FormPrivilege createFormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion){
+		return new FormPrivilege(){{
+			setFormId(formId);
+			setPrivilegeName(privilegeName);
+			setEditable(editable);
+			setViewable(viewable);
+			setFormVersion(formVersion);
 		}};
 	}
 }

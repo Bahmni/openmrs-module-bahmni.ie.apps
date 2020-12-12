@@ -8,14 +8,45 @@ import org.openmrs.customdatatype.CustomValueDescriptor;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-public class FormPrivilege extends BaseOpenmrsMetadata {
+public class FormPrivilege extends BaseOpenmrsObject implements java.io.Serializable {
 
     private Integer formId;
     private String privilegeName;
     private Boolean editable;
     private Boolean viewable;
+    private Date dateCreated;
+    private Date dateChanged;
+
+
+
+public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion) {
+
+        this.formId = formId;
+        this.privilegeName = privilegeName;
+        this.editable = editable;
+        this.viewable = viewable;
+        this.formVersion = formVersion;
+
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Date dateChanged) {
+        this.dateChanged = dateChanged;
+    }
 
     public String getFormVersion() {
         return formVersion;
@@ -30,15 +61,7 @@ public class FormPrivilege extends BaseOpenmrsMetadata {
 
     public FormPrivilege() {
     }
-    public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion) {
-
-        this.formId = formId;
-        this.privilegeName = privilegeName;
-        this.editable = editable;
-        this.viewable = viewable;
-        this.formVersion = formVersion;
-
-    }
+    
     public Integer getForm_privilege_id() {
         return form_privilege_id;
     }

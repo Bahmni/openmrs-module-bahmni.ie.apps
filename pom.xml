@@ -57,7 +57,11 @@
 				<artifactId>jakarta.xml.bind-api</artifactId>
 				<version>2.3.2</version>
 			</dependency>
-
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+			</dependency>
 			<!-- Runtime, com.sun.xml.bind module -->
 			<dependency>
 				<groupId>org.glassfish.jaxb</groupId>
@@ -87,7 +91,21 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
 
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito2</artifactId>
+				<version>2.0.0-beta.5</version> <!-- or higher -->
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>2.0.0-beta.5</version> <!-- or higher -->
+			</dependency>
 			<dependency>
 				<groupId>org.openmrs.test</groupId>
 				<artifactId>openmrs-test</artifactId>

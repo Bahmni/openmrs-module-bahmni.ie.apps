@@ -48,7 +48,7 @@ public class BahmniFormDaoImplTest {
         PowerMockito.when(query.list()).thenReturn(new ArrayList());
         bahmniFormDao.formsWithNameTransaltionsFor(null,true,false);
         verify(session).createQuery( "Select COALESCE(FR.valueReference,'[]') as nameTranslation, " +
-                "F.name as name,F.formId as id, F.uuid as uuid, F.version as version, F.published as published from FormResource FR " +
+                "F.name as name, F.formId as id, F.uuid as uuid, F.version as version, F.published as published from FormResource FR " +
                 "right outer join FR.form F with " +
                 "FR.datatypeClassname!='org.bahmni.customdatatype.datatype.FileSystemStorageDatatype' where  " +
                 "F.published=true   order by F.name asc, F.version desc");
@@ -62,7 +62,7 @@ public class BahmniFormDaoImplTest {
         PowerMockito.when(query.setResultTransformer(any(ResultTransformer.class))).thenReturn(query);
         PowerMockito.when(query.list()).thenReturn(new ArrayList());
         bahmniFormDao.formsWithNameTransaltionsFor(null,false,false);
-        verify(session).createQuery( "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name,F.formId as id, " +
+        verify(session).createQuery( "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name, F.formId as id, " +
                 "F.uuid as uuid, F.version as version" +
                 ", F.published as published from FormResource FR right outer join FR.form F " +
                 "with FR.datatypeClassname!='org.bahmni.customdatatype.datatype.FileSystemStorageDatatype' where " +
@@ -78,7 +78,7 @@ public class BahmniFormDaoImplTest {
         PowerMockito.when(query.list()).thenReturn(new ArrayList());
         bahmniFormDao.formsWithNameTransaltionsFor(null,true,true);
         verify(session).createQuery( "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name, F.formId as id," +
-                "F.uuid as uuid, F.version as version" +
+                " F.uuid as uuid, F.version as version" +
                 ", F.published as published from FormResource FR right outer join FR.form F " +
                 "with FR.datatypeClassname!='org.bahmni.customdatatype.datatype.FileSystemStorageDatatype'" +
                 "     order by F.name asc, F.version desc");
