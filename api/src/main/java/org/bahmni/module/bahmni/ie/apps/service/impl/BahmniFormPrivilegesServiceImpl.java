@@ -55,42 +55,35 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
         List<FormPrivilege> privilegesList = new ArrayList<FormPrivilege>();
         List<FormPrivilege> oldPrivilegeList = new ArrayList<FormPrivilege>();
 
-        Iterator privilegeItr = formPrivileges.iterator();
-        int formId = 0;
-        String formVersion = "";
-
-        while (privilegeItr.hasNext()) {
-            LinkedHashMap temp = (LinkedHashMap) privilegeItr.next();
-            List<Map.Entry> entrySetList = new ArrayList<Map.Entry>(temp.entrySet());
-            FormPrivilege tempPrivilege = new FormPrivilege();
-            for (Map.Entry tempEntrySet : entrySetList) {
-                if (tempEntrySet.getKey().toString().equalsIgnoreCase("formId")) {
+            Iterator privilegeItr = formPrivileges.iterator();
+            while (privilegeItr.hasNext()) {
+                LinkedHashMap temp = (LinkedHashMap) privilegeItr.next();
+                List<Map.Entry> entrySetList = new ArrayList<Map.Entry>(temp.entrySet());
+                FormPrivilege tempPrivilege = new FormPrivilege();
+                for (Map.Entry tempEntrySet : entrySetList) {
                     tempPrivilege.setFormId((Integer) temp.get("formId"));
-                    formId = (Integer) temp.get("formId");
-
-                } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("editable")) {
                     tempPrivilege.setEditable((Boolean) temp.get("editable"));
-                } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("privilegeName")) {
-                    String privilegeName = temp.get("privilegeName").toString();
-                    tempPrivilege.setPrivilegeName(privilegeName);
-                } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("viewable")) {
+                    tempPrivilege.setPrivilegeName(temp.get("privilegeName").toString());
                     tempPrivilege.setViewable((Boolean) temp.get("viewable"));
-                }else if (tempEntrySet.getKey().toString().equalsIgnoreCase("formVersion")) {
                     tempPrivilege.setFormVersion((String) temp.get("formVersion"));
-                    formVersion = tempPrivilege.getFormVersion();
+                    }
+                privilegesList.add(tempPrivilege);
+                }
+            if (privilegesList.size() == 1 && privilegesList.get(0).getPrivilegeName().equalsIgnoreCase("")) {
+                deleteAllThePrivilegesFromDB(privilegesList.get(0).getFormId() , privilegesList.get(0).getFormVersion());
+            } else {
+                oldPrivilegeList = getAllPrivilegesForForm(privilegesList.get(0).getFormId() , privilegesList.get(0).getFormVersion());
+                if ((oldPrivilegeList != null) && !(oldPrivilegeList.isEmpty())) {
+                    for (int i = 0; i < oldPrivilegeList.size(); i++) {
+                        bahmniFormPrivilegeDao.deleteFormPrivilege(oldPrivilegeList.get(i));
+                    }
+                }
+                if (privilegesList != null) {
+                    for(int i=0;i<privilegesList.size();i++){
+                        resultList.add(saveFormPrivilege(privilegesList.get(i)));
+                    }
                 }
             }
-            privilegesList.add(tempPrivilege);
-        }
-        if (privilegesList.size() == 1 && privilegesList.get(0).getPrivilegeName().equalsIgnoreCase("")) {
-            deleteAllThePrivilegesFromDB(formId , formVersion);
-        } else {
-            if (privilegesList != null) {
-                for(int i=0;i<privilegesList.size();i++){
-                    resultList.add(saveFormPrivilege(privilegesList.get(i)));
-                }
-            }
-        }
         return resultList;
 
     }
@@ -105,7 +98,6 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
                 bahmniFormPrivilegeDao.deleteFormPrivilege(privilegeListToBeDeleted.get(i));
             }
         }
-
     }
     @Override
     public List<FormPrivilege> getAllPrivilegesForForm(Integer formId , String formVersion) {
