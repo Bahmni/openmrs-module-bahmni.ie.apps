@@ -3,10 +3,7 @@ package org.bahmni.module.bahmni.ie.apps.model;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.customdatatype.CustomValueDescriptor;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import org.openmrs.User;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +16,8 @@ public class FormPrivilege extends BaseOpenmrsObject implements java.io.Serializ
     private Boolean viewable;
     private Date dateCreated;
     private Date dateChanged;
-
-
+    private String formVersion;
+    private Integer form_privilege_id;
 
 public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boolean viewable , String formVersion) {
 
@@ -56,8 +53,6 @@ public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boo
         this.formVersion = formVersion;
     }
 
-    private String formVersion;
-    private Integer form_privilege_id;
 
     public FormPrivilege() {
     }
@@ -86,7 +81,6 @@ public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boo
         this.privilegeName = privilegeName;
     }
 
-
     public Boolean getEditable() {
         return editable;
     }
@@ -105,7 +99,7 @@ public FormPrivilege(Integer formId, String privilegeName, Boolean editable, Boo
 
     @Override
     public Integer getId() {
-        return null;
+        return getForm_privilege_id();
     }
 
     @Override

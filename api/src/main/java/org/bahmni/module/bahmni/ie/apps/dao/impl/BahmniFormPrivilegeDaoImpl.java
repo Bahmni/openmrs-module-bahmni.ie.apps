@@ -45,15 +45,17 @@ public class BahmniFormPrivilegeDaoImpl implements BahmniFormPrivilegeDao {
         return  criteria.list();
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public FormPrivilege saveFormPrivilege(FormPrivilege formPrivilege) {
         sessionFactory.getCurrentSession().saveOrUpdate(formPrivilege);        
         return formPrivilege;
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public FormPrivilege deleteFormPrivilege(FormPrivilege formPrivilege) {
          sessionFactory.getCurrentSession().delete(formPrivilege);
          sessionFactory.getCurrentSession().flush();

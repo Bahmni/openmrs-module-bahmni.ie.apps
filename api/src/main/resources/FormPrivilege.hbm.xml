@@ -15,7 +15,7 @@
         <property name="privilegeName" type="java.lang.String" column="privilegeName" length="1000"/>
         <property name="editable" type="java.lang.Boolean" column="editable" length="1" not-null="true" />
         <property name="viewable" type="java.lang.Boolean" column="viewable" length="1" not-null="true" />
-        <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19"/>
-        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19"/>
-    </class>
+        <property name="dateCreated" type="java.util.Date" column="date_created"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed"/>
+        </class>
 </hibernate-mapping>
