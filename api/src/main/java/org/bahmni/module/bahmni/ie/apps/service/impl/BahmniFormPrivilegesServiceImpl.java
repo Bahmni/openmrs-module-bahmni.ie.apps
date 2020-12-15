@@ -4,8 +4,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormPrivilegeDao;
 import org.bahmni.module.bahmni.ie.apps.model.FormPrivilege;
+import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormPrivilegesService;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -32,19 +36,14 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
     }
 
     public FormPrivilege saveFormPrivilege(FormPrivilege toPersistFormPrivilege) throws APIException {
-
         if (toPersistFormPrivilege != null) {
             FormPrivilege originalFormPrivilege ;
             originalFormPrivilege = getFormPrivilege(toPersistFormPrivilege.getPrivilegeName(),toPersistFormPrivilege.getFormId());
-
             if (originalFormPrivilege != null) {
-                originalFormPrivilege.setFormId(toPersistFormPrivilege.getFormId());
-                originalFormPrivilege.setPrivilegeName(toPersistFormPrivilege.getPrivilegeName());
                 originalFormPrivilege.setEditable(toPersistFormPrivilege.getEditable());
                 originalFormPrivilege.setViewable(toPersistFormPrivilege.getViewable());
                 toPersistFormPrivilege = originalFormPrivilege;
             }
-
             return bahmniFormPrivilegeDao.saveFormPrivilege(toPersistFormPrivilege);
         } else {
             return null;
@@ -54,59 +53,47 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
     @Override
     @Transactional
     public List<FormPrivilege> saveFormPrivileges(List<FormPrivilege> formPrivileges) {
-        log.info("Inside BahmniFormPrivilegesServiceImpl -->saveFormPrivileges " + formPrivileges);
+        ObjectMapper mapper = new ObjectMapper();
+        List<FormPrivilege> incomingFormPrivileges =
+                mapper.convertValue(formPrivileges, new TypeReference<List<FormPrivilege>>() {});
         List<FormPrivilege> resultList = new ArrayList<FormPrivilege>();
-        List<FormPrivilege> privilegesList = new ArrayList<FormPrivilege>();
         List<FormPrivilege> oldPrivilegeList = new ArrayList<FormPrivilege>();
-
-            Iterator privilegeItr = formPrivileges.iterator();
-            int formId = 0;
-            String formVersion = "";
-
-            while (privilegeItr.hasNext()) {
-                LinkedHashMap temp = (LinkedHashMap) privilegeItr.next();
-                List<Map.Entry> entrySetList = new ArrayList<Map.Entry>(temp.entrySet());
-                FormPrivilege tempPrivilege = new FormPrivilege();
-                for (Map.Entry tempEntrySet : entrySetList) {
-                    if (tempEntrySet.getKey().toString().equalsIgnoreCase("formId")) {
-                        tempPrivilege.setFormId((Integer) temp.get("formId"));
-                        formId = (Integer) temp.get("formId");
-                    } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("editable")) {
-                        tempPrivilege.setEditable((Boolean) temp.get("editable"));
-                    } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("privilegeName")) {
-                         String privilegeName = temp.get("privilegeName").toString();
-                         tempPrivilege.setPrivilegeName(privilegeName);
-                    } else if (tempEntrySet.getKey().toString().equalsIgnoreCase("viewable")) {
-                        tempPrivilege.setViewable((Boolean) temp.get("viewable"));
-                    }else if (tempEntrySet.getKey().toString().equalsIgnoreCase("formVersion")) {
-                        tempPrivilege.setFormVersion((String) temp.get("formVersion"));
-                        formVersion = tempPrivilege.getFormVersion();
-                    }
-                }
-                privilegesList.add(tempPrivilege);
+        List<FormPrivilege> privilegesList = new ArrayList<FormPrivilege>();
+        for(FormPrivilege temp : incomingFormPrivileges) {
+            FormPrivilege tempPrivilege = new FormPrivilege();
+            Optional.ofNullable(temp.getFormId()).ifPresent(x -> { tempPrivilege.setFormId((Integer) x); });
+            Optional.ofNullable(temp.getEditable()).ifPresent(x -> { tempPrivilege.setEditable((Boolean) x); });
+            Optional.ofNullable(temp.getViewable()).ifPresent(x -> { tempPrivilege.setViewable((Boolean) x); });
+            Optional.ofNullable(temp.getPrivilegeName()).ifPresent(x -> { tempPrivilege.setPrivilegeName((String) x); });
+            Optional.ofNullable(temp.getFormVersion()).ifPresent(x -> { tempPrivilege.setFormVersion((String) x); });
+            privilegesList.add(tempPrivilege);
+        }
+        if (privilegesList.size() == 1 && privilegesList.get(0).getPrivilegeName().equalsIgnoreCase("")) {
+            if((privilegesList.get(0).getFormId() != null) && (privilegesList.get(0).getFormVersion() != null)) {
+                deleteAllThePrivilegesFromDB(privilegesList.get(0).getFormId(), privilegesList.get(0).getFormVersion());
             }
-            if (privilegesList.size() == 1 && privilegesList.get(0).getPrivilegeName().equalsIgnoreCase("")) {
-                deleteAllThePrivilegesFromDB(formId , formVersion);
-            } else {
-                oldPrivilegeList = getAllPrivilegesForForm(formId , formVersion);
-                if ((oldPrivilegeList != null) && !(oldPrivilegeList.isEmpty())) {
+        } else {
+            oldPrivilegeList = getAllPrivilegesForForm(privilegesList.get(0).getFormId() , privilegesList.get(0).getFormVersion());
+            if ((oldPrivilegeList != null) && !(oldPrivilegeList.isEmpty())) {
+                if(oldPrivilegeList.get(0).getFormId() == privilegesList.get(0).getFormId() ) {
                     for (int i = 0; i < oldPrivilegeList.size(); i++) {
                         bahmniFormPrivilegeDao.deleteFormPrivilege(oldPrivilegeList.get(i));
                     }
                 }
-                if (privilegesList != null) {
-                    for(int i=0;i<privilegesList.size();i++){
-                        resultList.add(saveFormPrivilege(privilegesList.get(i)));
-                    }
+            }
+            if (privilegesList != null) {
+                for(int i=0;i<privilegesList.size();i++){
+                    resultList.add(saveFormPrivilege(privilegesList.get(i)));
                 }
             }
+        }
         return resultList;
 
     }
-        @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public FormPrivilege getFormPrivilege(String privilgeName , Integer formId) throws APIException {
-       return bahmniFormPrivilegeDao.getFormPrivilege(privilgeName,formId);
-   }
+        return bahmniFormPrivilegeDao.getFormPrivilege(privilgeName,formId);
+    }
     public void deleteAllThePrivilegesFromDB( Integer formId , String formVersion){
         List<FormPrivilege> privilegeListToBeDeleted = getAllPrivilegesForForm(formId, formVersion);
         if ((privilegeListToBeDeleted != null) && !(privilegeListToBeDeleted.isEmpty())) {
@@ -114,7 +101,6 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
                 bahmniFormPrivilegeDao.deleteFormPrivilege(privilegeListToBeDeleted.get(i));
             }
         }
-
     }
     @Override
     public List<FormPrivilege> getAllPrivilegesForForm(Integer formId , String formVersion) {
@@ -136,6 +122,14 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
         }
         return formPrivileges;
     }
-
+    private boolean comparePrivileges(FormPrivilege originalFormPrivilege, FormPrivilege newPrivilege){
+        if((originalFormPrivilege.getFormId() == newPrivilege.getFormId())
+                && (originalFormPrivilege.getFormVersion() == newPrivilege.getFormVersion())
+                && (originalFormPrivilege.getPrivilegeName() == newPrivilege.getPrivilegeName())){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }
