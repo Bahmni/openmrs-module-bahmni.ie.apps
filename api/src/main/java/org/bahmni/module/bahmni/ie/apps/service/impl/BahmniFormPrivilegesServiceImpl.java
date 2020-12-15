@@ -4,8 +4,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormPrivilegeDao;
 import org.bahmni.module.bahmni.ie.apps.model.FormPrivilege;
+import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormPrivilegesService;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 
@@ -50,33 +53,32 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
     @Override
     @Transactional
     public List<FormPrivilege> saveFormPrivileges(List<FormPrivilege> formPrivileges) {
-        log.info("Inside BahmniFormPrivilegesServiceImpl -->saveFormPrivileges " + formPrivileges);
+        ObjectMapper mapper = new ObjectMapper();
+        List<FormPrivilege> incomingFormPrivileges =
+                mapper.convertValue(formPrivileges, new TypeReference<List<FormPrivilege>>() {});
         List<FormPrivilege> resultList = new ArrayList<FormPrivilege>();
-        List<FormPrivilege> privilegesList = new ArrayList<FormPrivilege>();
         List<FormPrivilege> oldPrivilegeList = new ArrayList<FormPrivilege>();
-
-        Iterator privilegeItr = formPrivileges.iterator();
-        while (privilegeItr.hasNext()) {
-            LinkedHashMap temp = (LinkedHashMap) privilegeItr.next();
-            List<Map.Entry> entrySetList = new ArrayList<Map.Entry>(temp.entrySet());
+        List<FormPrivilege> privilegesList = new ArrayList<FormPrivilege>();
+        for(FormPrivilege temp : incomingFormPrivileges) {
             FormPrivilege tempPrivilege = new FormPrivilege();
-            for (Map.Entry tempEntrySet : entrySetList) {
-                tempPrivilege.setFormId((Integer) temp.get("formId"));
-                tempPrivilege.setEditable((Boolean) temp.get("editable"));
-                String privilegeName = temp.get("privilegeName").toString();
-                tempPrivilege.setPrivilegeName(privilegeName);
-                tempPrivilege.setViewable((Boolean) temp.get("viewable"));
-                tempPrivilege.setFormVersion((String) temp.get("formVersion"));
-            }
+            Optional.ofNullable(temp.getFormId()).ifPresent(x -> { tempPrivilege.setFormId((Integer) x); });
+            Optional.ofNullable(temp.getEditable()).ifPresent(x -> { tempPrivilege.setEditable((Boolean) x); });
+            Optional.ofNullable(temp.getViewable()).ifPresent(x -> { tempPrivilege.setViewable((Boolean) x); });
+            Optional.ofNullable(temp.getPrivilegeName()).ifPresent(x -> { tempPrivilege.setPrivilegeName((String) x); });
+            Optional.ofNullable(temp.getFormVersion()).ifPresent(x -> { tempPrivilege.setFormVersion((String) x); });
             privilegesList.add(tempPrivilege);
         }
         if (privilegesList.size() == 1 && privilegesList.get(0).getPrivilegeName().equalsIgnoreCase("")) {
-            deleteAllThePrivilegesFromDB(privilegesList.get(0).getFormId() , privilegesList.get(0).getFormVersion());
+            if((privilegesList.get(0).getFormId() != null) && (privilegesList.get(0).getFormVersion() != null)) {
+                deleteAllThePrivilegesFromDB(privilegesList.get(0).getFormId(), privilegesList.get(0).getFormVersion());
+            }
         } else {
             oldPrivilegeList = getAllPrivilegesForForm(privilegesList.get(0).getFormId() , privilegesList.get(0).getFormVersion());
             if ((oldPrivilegeList != null) && !(oldPrivilegeList.isEmpty())) {
-                for (int i = 0; i < oldPrivilegeList.size(); i++) {
-                    bahmniFormPrivilegeDao.deleteFormPrivilege(oldPrivilegeList.get(i));
+                if(oldPrivilegeList.get(0).getFormId() == privilegesList.get(0).getFormId() ) {
+                    for (int i = 0; i < oldPrivilegeList.size(); i++) {
+                        bahmniFormPrivilegeDao.deleteFormPrivilege(oldPrivilegeList.get(i));
+                    }
                 }
             }
             if (privilegesList != null) {
