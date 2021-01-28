@@ -95,11 +95,9 @@ public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implemen
                             bahmniFormPrivilegeDao.deleteFormPrivilege(oldPrivilegeList.get(i));
                         }
                     }
-                    //if (privilegesList != null) {
                         for (int i = 0; i < privilegesList.size(); i++) {
                             resultList.add(saveFormPrivilege(privilegesList.get(i)));
                         }
-                    //}
                 }
             }
         return resultList;
