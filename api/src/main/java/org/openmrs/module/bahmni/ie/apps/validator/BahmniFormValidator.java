@@ -1,4 +1,4 @@
-package org.bahmni.module.bahmni.ie.apps.validator;
+package org.openmrs.module.bahmni.ie.apps.validator;
 
 import org.openmrs.Form;
 import org.openmrs.annotation.Handler;
