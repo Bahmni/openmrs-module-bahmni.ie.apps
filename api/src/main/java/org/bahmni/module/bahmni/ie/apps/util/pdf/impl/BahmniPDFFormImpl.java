@@ -92,7 +92,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
         String dateTimeblank = "__/___/____ , __:__";
-        html += "<table><tr><td style=\"width: 30%;\">" + dateTimeFieldLabel + "</td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
+        html += "<table><tr><td style=\"width: 35%;\">" + dateTimeFieldLabel +" (dd/mm/yyyy)" +"</td><td style=\"width: 5%;\"></td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
     }
 
     @Override
