@@ -123,8 +123,24 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
-        String dateTimeblank = "__/___/____ , __:__";
-        html += "<table><tr><td style=\"width: 35%;\">" + dateTimeFieldLabel +" (dd/mm/yyyy)" +"</td><td style=\"width: 5%;\"></td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(60);
+        String dateTimeBlankColumnLStyles = pdfFormConfig.getStyles();
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + dateTimeFieldLabel +"(dd/mm/yyyy)"+ "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String dateTimeBlankColumn  = "<td "+dateTimeBlankColumnLStyles+">__/___/____ , __:__ AM/PM</td>";
+
+        html += "<table  " +TableStyles+"><tr>"+labelColumn  + emptyColumn + dateTimeBlankColumn +  "</tr></table>";
         html += addLineBreak();
     }
 
