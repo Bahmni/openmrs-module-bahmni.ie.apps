@@ -69,7 +69,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addTextField(String textFieldLabel) {
-        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 30%;\">" + textFieldLabel + "</td><td style=\"width: 70%; border: 3px solid black; height: 50px;\"></td></tr></table>";
+        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + textFieldLabel + "</td><td style=\" width:5% \"></td><td style=\"width: 60%; border-bottom: 1px ridge black;\"></td></tr></table>";
     }
 
     @Override
@@ -92,7 +92,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
         String dateTimeblank = "__/___/____ , __:__";
-        html += "<table><tr><td style=\"width: 30%;\">" + dateTimeFieldLabel + "</td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
+        html += "<table><tr><td style=\"width: 35%;\">" + dateTimeFieldLabel +" (dd/mm/yyyy)" +"</td><td style=\"width: 5%;\"></td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
     }
 
     @Override
