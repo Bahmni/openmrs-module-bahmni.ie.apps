@@ -102,8 +102,8 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addBooleanField(String booleanFieldLabel) {
-        String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
-        html += "<table><tr><td style=\"width: 30%;\">" + booleanFieldLabel + "</td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td> </tr></table>";
+        String checkBoxStyle = "\"float: left;max-height: 50%;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
+        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + booleanFieldLabel + "</td><td style=\" width:5% \"></td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td></tr></table>";
         html += addLineBreak();
     }
 
