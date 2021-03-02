@@ -4,6 +4,9 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import org.apache.log4j.Logger;
+import org.bahmni.module.bahmni.ie.apps.config.PdfFormConfig;
+import org.bahmni.module.bahmni.ie.apps.util.json.impl.ParserImpl;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.BahmniPDFForm;
 
 import java.io.ByteArrayInputStream;
@@ -24,9 +27,13 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     private final String filename;
     private String html = "";
 
+    PdfFormConfig pdfFormConfig;
+    private Logger logger = Logger.getLogger(ParserImpl.class);
+
     public BahmniPDFFormImpl() throws IOException, DocumentException {
         filename = createDirsAndGetFilePath();
         document = new Document();
+        pdfFormConfig = new PdfFormConfig();
         writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
         document.open();
     }
@@ -69,7 +76,28 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addTextField(String textFieldLabel) {
-        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + textFieldLabel + "</td><td style=\" width:5% \"></td><td style=\"width: 60%; border-bottom: 1px ridge black;\"></td></tr></table>";
+
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(60);
+        pdfFormConfig.setContentFieldBox(1, "ridge", "black");
+        String contentColumnStyles = pdfFormConfig.getStyles();
+
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + textFieldLabel + "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String contentColumn = "<td " + contentColumnStyles + "></td>";
+
+        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + contentColumn + "</tr></table>";
+        logger.warn(html);
     }
 
     @Override
