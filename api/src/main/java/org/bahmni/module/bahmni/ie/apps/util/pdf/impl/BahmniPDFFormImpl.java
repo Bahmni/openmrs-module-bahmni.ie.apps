@@ -155,7 +155,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setMinimumWidth(60);
         String dateTimeBlankColumnLStyles = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + dateTimeFieldLabel +"(dd/mm/yyyy)"+ "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + dateTimeFieldLabel +" (dd/mm/yyyy)"+ "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String dateTimeBlankColumn  = "<td "+dateTimeBlankColumnLStyles+">__/___/____ , __:__ AM/PM</td>";
 
