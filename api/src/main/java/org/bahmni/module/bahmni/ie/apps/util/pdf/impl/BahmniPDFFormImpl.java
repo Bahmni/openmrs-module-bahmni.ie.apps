@@ -152,6 +152,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
 
         pdfFormConfig.setWidth(60);
+        pdfFormConfig.setMinimumWidth(60);
         String dateTimeBlankColumnLStyles = pdfFormConfig.getStyles();
 
         String labelColumn = "<td " + labelColumnStyles + ">" + dateTimeFieldLabel +"(dd/mm/yyyy)"+ "</td>";
@@ -171,7 +172,17 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addCodedField(String codedFieldLabel, List<String> codes) {
-        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + codedFieldLabel + "</td>"+"<td style=\"width: 10%;\"></td>" + generateDynamicCode(codes) + "</tr></table>";
+        String TableStyles = pdfFormConfig.getTableStyles();
+
+
+        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
+
+        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + codedFieldLabel + "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+
+        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + generateDynamicCode(codes) + "</tr></table>";
         html += addLineBreak();
     }
 
