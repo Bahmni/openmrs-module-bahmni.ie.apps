@@ -78,16 +78,13 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addTextField(String textFieldLabel) {
 
-        pdfFormConfig.setMaximumWidth(100);
-        pdfFormConfig.setWidth(100);
-        String TableStyles = pdfFormConfig.getStyles();
+        String TableStyles = pdfFormConfig.getTableStyles();
 
-        pdfFormConfig.setWidth(35);
-        String labelColumnStyles = pdfFormConfig.getStyles();
+        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
 
-        pdfFormConfig.setWidth(5);
-        String emptyColumnStyles = pdfFormConfig.getStyles();
+        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
 
+        pdfFormConfig.setMinimumWidth(60);
         pdfFormConfig.setWidth(60);
         pdfFormConfig.setContentFieldBox(1, "ridge", "black");
         String contentColumnStyles = pdfFormConfig.getStyles();
@@ -100,12 +97,37 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + contentColumn + "</tr></table>";
 
         html += addLineBreak();
+
+        logger.warn(html);
     }
 
     @Override
     public void addNumericField(String numericFieldLabel, String unit) {
-        html += "<table><tr><td style=\"width: 35%;\">" + numericFieldLabel + "</td><td style=\"width:5%\"></td><td style=\"border-bottom : 1px ridge black;width:40%\"></td><td>" + unit + "</td></tr></table>";
+
+        String TableStyles = pdfFormConfig.getTableStyles();
+
+        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
+
+        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+
+        pdfFormConfig.setWidth(50);
+        pdfFormConfig.setMinimumWidth(50);
+        pdfFormConfig.setContentFieldBox(1, "ridge", "black");
+        String contentColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setMinimumWidth(10);
+        pdfFormConfig.setWidth(10);
+        String unitColumnStyles = pdfFormConfig.getStyles();
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + numericFieldLabel + "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String contentColumn = "<td " + contentColumnStyles + "></td>";
+        String unitColumn = "<td " + unitColumnStyles + ">" + unit + "</td>";
+
+        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + contentColumn + unitColumn + "</tr></table>";
         html += addLineBreak();
+
+        logger.warn(html);
     }
 
     @Override

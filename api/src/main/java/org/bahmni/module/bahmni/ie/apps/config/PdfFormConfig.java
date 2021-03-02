@@ -12,6 +12,30 @@ public class PdfFormConfig {
     private Logger logger = Logger.getLogger(ParserImpl.class);
 
 
+    public String getTableStyles() {
+        setMaximumWidth(100);
+        setWidth(100);
+        return getStyles();
+    }
+
+    public String getLabelColumnStyles() {
+        setMinimumWidth(35);
+        setWidth(35);
+        return getStyles();
+    }
+
+    public String getEmptyColumnStyles() {
+        setMinimumWidth(5);
+        setWidth(5);
+        return getStyles();
+    }
+
+    public void setMinimumWidth(int value){
+        String valueInPercentage = value + "%";
+
+        styles.add("min-width:" + valueInPercentage);
+    }
+
     public void setMaximumWidth(int value) {
         String valueInPercentage = value + "%";
 
