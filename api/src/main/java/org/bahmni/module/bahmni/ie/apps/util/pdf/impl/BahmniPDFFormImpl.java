@@ -65,46 +65,52 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     @Override
     public void addLabel(String labelText) {
         html += "<p>" + labelText + "</p>";
+        html += addLineBreak();
     }
 
     @Override
     public void addTextField(String textFieldLabel) {
         html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + textFieldLabel + "</td><td style=\" width:5% \"></td><td style=\"width: 60%; border-bottom: 1px ridge black;\"></td></tr></table>";
+        html += addLineBreak();
     }
 
     @Override
     public void addNumericField(String numericFieldLabel, String unit) {
-        html +="<br></br>";
         html += "<table><tr><td style=\"width: 35%;\">" + numericFieldLabel + "</td><td style=\"width:5%\"></td><td style=\"border-bottom : 1px ridge black;width:40%\"></td><td>" + unit + "</td></tr></table>";
+        html += addLineBreak();
     }
 
     @Override
     public void beginSection(String sectionTitle) {
         html += "<h4>" + sectionTitle + "</h4>";
         html += "<table style=\"width: 100%; border: 1px solid black;\"><tr><td>";
+        html += addLineBreak();
     }
 
     @Override
     public void endSection() {
         html += "</td></tr></table>";
+        html += addLineBreak();
     }
 
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
         String dateTimeblank = "__/___/____ , __:__";
         html += "<table><tr><td style=\"width: 35%;\">" + dateTimeFieldLabel +" (dd/mm/yyyy)" +"</td><td style=\"width: 5%;\"></td><td>" + dateTimeblank + "</td><td style=\"width: 30%;\">" + "AM/PM" + "</td></tr></table>";
+        html += addLineBreak();
     }
 
     @Override
     public void addBooleanField(String booleanFieldLabel) {
         String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
         html += "<table><tr><td style=\"width: 30%;\">" + booleanFieldLabel + "</td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td> </tr></table>";
+        html += addLineBreak();
     }
 
     @Override
     public void addCodedField(String codedFieldLabel, List<String> codes) {
-        html +="<br></br>";
         html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + codedFieldLabel + "</td>"+"<td style=\"width: 10%;\"></td>" + generateDynamicCode(codes) + "</tr></table>";
+        html += addLineBreak();
     }
 
     private String generateDynamicCode(List<String> codes) {
@@ -122,5 +128,9 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
             }
         }
         return codeHtml.toString();
+    }
+
+    private String addLineBreak() {
+        return "<br/>";
     }
 }
