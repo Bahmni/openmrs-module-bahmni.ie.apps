@@ -74,8 +74,8 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addNumericField(String numericFieldLabel, String unit) {
-        String blank = "______________";
-        html += "<table><tr><td style=\"width: 30%;\">" + numericFieldLabel + "</td><td>" + blank + "</td><td style=\"width: 30%;\">" + unit + "</td></tr></table>";
+        html +="<br></br>";
+        html += "<table><tr><td style=\"width: 35%;\">" + numericFieldLabel + "</td><td style=\"width:5%\"></td><td style=\"border-bottom : 1px ridge black;width:40%\"></td><td>" + unit + "</td></tr></table>";
     }
 
     @Override
