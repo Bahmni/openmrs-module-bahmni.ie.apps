@@ -122,4 +122,19 @@ public class ParserImplTest {
         verify(bahmniPDFForm).addCodedField("Hackathon-Coded_Parent", codes);
         verify(bahmniPDFForm).endSection();
     }
+
+    @Test
+    public void shouldParseJsonAndPrintObsGroupControl() throws IOException, DocumentException {
+        parserImpl = new ParserImpl();
+        JSONObject jsonObject = new JSONObject("{\"formJson\":{\"name\":\"HackathonForm\",\"version\":\"1\",\"published\":true},\"resources\":[{\"value\":{\"name\":\"HackathonForm\",\"defaultLocale\":\"en\",\"controls\":[{\"type\":\"obsGroupControl\",\"label\":{\"translationKey\":\"OBS_GROUP_CONTROL_8\",\"type\":\"label\",\"value\":\"ObsGroupControl-1\",\"id\":\"8\"},\"id\":\"8\",\"controls\":[{\"type\":\"obsControl\",\"label\":{\"translationKey\":\"HACKATHON-CODED_PARENT_9\",\"id\":\"9\",\"units\":\"\",\"type\":\"label\",\"value\":\"Hackathon-Coded_Parent\"},\"properties\":{\"mandatory\":false,\"notes\":false,\"addMore\":false,\"hideLabel\":false,\"autoComplete\":false,\"multiSelect\":false,\"dropDown\":false},\"id\":\"9\",\"concept\":{\"name\":\"Hackathon-Coded_Parent\",\"datatype\":\"Coded\",\"conceptClass\":\"Misc\",\"answers\":[{\"name\":{\"display\":\"Hackathon-Coded_1\",\"name\":\"Hackathon-Coded_1\",\"locale\":\"en\",\"localePreferred\":true,\"conceptNameType\":\"FULLY_SPECIFIED\"},\"displayString\":\"Hackathon-Coded_1\",\"translationKey\":\"HACKATHON-CODED_1_9\"},{\"name\":{\"display\":\"Hackathon-Coded_2\",\"name\":\"Hackathon-Coded_2\",\"locale\":\"en\",\"localePreferred\":true,\"conceptNameType\":\"FULLY_SPECIFIED\"},\"displayString\":\"Hackathon-Coded_2\",\"translationKey\":\"HACKATHON-CODED_2_9\"}]},\"units\":null,\"hiNormal\":null,\"lowNormal\":null,\"hiAbsolute\":null,\"lowAbsolute\":null}]}]}}]}");
+
+        parserImpl.jsonToPdfParser(bahmniPDFForm, jsonObject);;
+
+        List<String> codes = new ArrayList<String>();
+        codes.add("Hackathon-Coded_1");
+        codes.add("Hackathon-Coded_2");
+        verify(bahmniPDFForm).beginSection("ObsGroupControl-1");
+        verify(bahmniPDFForm).addCodedField("Hackathon-Coded_Parent", codes);
+        verify(bahmniPDFForm).endSection();
+    }
 }
