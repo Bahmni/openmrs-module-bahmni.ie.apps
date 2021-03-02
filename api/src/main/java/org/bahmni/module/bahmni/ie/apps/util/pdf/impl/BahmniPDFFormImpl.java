@@ -145,15 +145,11 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
-        pdfFormConfig.setMaximumWidth(100);
-        pdfFormConfig.setWidth(100);
-        String TableStyles = pdfFormConfig.getStyles();
+        String TableStyles = pdfFormConfig.getTableStyles();
 
-        pdfFormConfig.setWidth(35);
-        String labelColumnStyles = pdfFormConfig.getStyles();
+        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
 
-        pdfFormConfig.setWidth(5);
-        String emptyColumnStyles = pdfFormConfig.getStyles();
+        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
 
         pdfFormConfig.setWidth(60);
         String dateTimeBlankColumnLStyles = pdfFormConfig.getStyles();
