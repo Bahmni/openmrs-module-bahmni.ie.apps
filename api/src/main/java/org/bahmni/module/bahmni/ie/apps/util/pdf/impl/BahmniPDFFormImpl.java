@@ -165,8 +165,28 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addBooleanField(String booleanFieldLabel) {
-        String checkBoxStyle = "\"float: left;max-height: 50%;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
-        html += "<table style=\"width: 100%; max-width: 100%;\"><tr><td style=\"width: 35%;\">" + booleanFieldLabel + "</td><td style=\" width:5% \"></td><td style=" + checkBoxStyle + "> </td> <td>Yes</td> <td style=" + checkBoxStyle + "</td> <td>No</td></tr></table>";
+
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(60);
+        pdfFormConfig.setCheckBox(20, 20, 50, 1);
+        String checkBoxStyle = pdfFormConfig.getStyles();
+
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + booleanFieldLabel + "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String contentColumn = "<td " + checkBoxStyle + "> </td> <td>Yes</td> <td " + checkBoxStyle + "> </td> <td>No</td>";
+
+        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + contentColumn + "</tr></table>";
+
         html += addLineBreak();
     }
 
@@ -183,6 +203,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
 
         html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + generateDynamicCode(codes) + "</tr></table>";
+
         html += addLineBreak();
     }
 
