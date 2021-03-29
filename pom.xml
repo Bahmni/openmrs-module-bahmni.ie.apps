@@ -8,12 +8,28 @@
 	<packaging>pom</packaging>
 	<name>bahmni.ie.apps Module</name>
 	<description>Services to support Implementer Interface Module</description>
+	<url>https://github.com/Bahmni</url>
+	<licenses>
+		<license>
+			<name>GNU AFFERO GENERAL PUBLIC LICENSE</name>
+			<url>https://www.gnu.org/licenses/agpl-3.0.txt</url>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
-			<name>bahmni</name>
+			<name>Bahmnitw</name>
+			<email>bahmnicommunity@gmail.com</email>
+			<organization>Bahmni</organization>
+			<organizationUrl>https://github.com/Bahmni</organizationUrl>
 		</developer>
 	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/bahmni/openmrs-module-bahmni.ie.apps.git</connection>
+		<developerConnection>scm:git:https://github.com/Bahmni/openmrs-module-bahmni.ie.apps.git</developerConnection>
+		<url>https://github.com/Bahmni/openmrs-module-bahmni.ie.apps</url>
+	</scm>
 
 	<organization>
 		<name>OpenMRS</name>
@@ -216,5 +232,57 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.2.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
