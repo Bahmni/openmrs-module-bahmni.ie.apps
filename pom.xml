@@ -33,11 +33,19 @@
 	</properties>
 
 	<distributionManagement>
+<!--		<snapshotRepository>-->
+<!--			<id>repo.mybahmni.org</id>-->
+<!--			<name>bahmni-artifactory-snapshots</name>-->
+<!--			<url>s3://repo.mybahmni.org/artifactory/snapshot</url>-->
+<!--		</snapshotRepository>-->
 		<snapshotRepository>
-			<id>repo.mybahmni.org</id>
-			<name>bahmni-artifactory-snapshots</name>
-			<url>s3://repo.mybahmni.org/artifactory/snapshot</url>
+			<id>nexus-sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<repository>
+			<id>nexus-sonatype</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
 	</distributionManagement>
 
 	<dependencyManagement>
@@ -130,6 +138,37 @@
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>2.4</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.sonatype.plugins</groupId>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<version>1.5.1</version>
+					<extensions>true</extensions>
+					<executions>
+						<execution>
+							<id>default-deploy</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<serverId>nexus-sonatype</serverId>
+						<nexusUrl>https://oss.sonatype.org</nexusUrl>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<extensions>
@@ -147,18 +186,41 @@
 			<name>OpenMRS Nexus Repository</name>
 			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
+<!--		<repository>-->
+<!--			<id>repo.mybahmni.org</id>-->
+<!--			<name>bahmni-artifactory-snapshots</name>-->
+<!--			<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>-->
+<!--			<snapshots>-->
+<!--				<updatePolicy>always</updatePolicy>-->
+<!--			</snapshots>-->
+<!--		</repository>-->
+<!--		<repository>-->
+<!--			<id>repo.mybahmni.org-release</id>-->
+<!--			<name>bahmni-artifactory-release</name>-->
+<!--			<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>-->
+<!--		</repository>-->
 		<repository>
-			<id>repo.mybahmni.org</id>
-			<name>bahmni-artifactory-snapshots</name>
-			<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/snapshot</url>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 			<snapshots>
-				<updatePolicy>always</updatePolicy>
+				<enabled>true</enabled>
+				<updatePolicy>interval:10080</updatePolicy>
 			</snapshots>
 		</repository>
 		<repository>
-			<id>repo.mybahmni.org-release</id>
-			<name>bahmni-artifactory-release</name>
-			<url>http://repo.mybahmni.org.s3.amazonaws.com/artifactory/release</url>
+			<id>sonatype-nexus-releases</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
