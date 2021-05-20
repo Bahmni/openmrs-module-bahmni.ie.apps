@@ -21,6 +21,8 @@ public interface BahmniPDFForm {
 
     void endSection();
 
+    void addDateField(String dateFieldLabel);
+
     void addDateTimeField(String dateTimeFieldLabel);
 
     void addBooleanField(String booleanFieldLabel);

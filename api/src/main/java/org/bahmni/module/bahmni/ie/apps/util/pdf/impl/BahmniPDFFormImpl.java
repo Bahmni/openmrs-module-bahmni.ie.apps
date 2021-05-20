@@ -144,6 +144,26 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     @Override
+    public void addDateField(String dateFieldLabel) {
+        String TableStyles = pdfFormConfig.getTableStyles();
+
+        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
+
+        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+
+        pdfFormConfig.setWidth(60);
+        pdfFormConfig.setMinimumWidth(60);
+        String dateBlankColumnLStyles = pdfFormConfig.getStyles();
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + dateFieldLabel +" (dd/mm/yyyy)"+ "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String dateBlankColumn  = "<td "+dateBlankColumnLStyles+">__/___/____ </td>";
+
+        html += "<table  " +TableStyles+"><tr>"+labelColumn  + emptyColumn + dateBlankColumn +  "</tr></table>";
+        html += addLineBreak();
+    }
+
+    @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
         String TableStyles = pdfFormConfig.getTableStyles();
 

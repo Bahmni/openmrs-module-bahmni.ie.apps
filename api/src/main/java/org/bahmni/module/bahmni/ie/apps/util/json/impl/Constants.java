@@ -13,6 +13,7 @@ public class Constants {
     public static final String TEXT = "Text";
     public static final String NUMERIC = "Numeric";
     public static final String UNITS = "units";
+    public static final String DATE = "Date";
     public static final String DATE_TIME = "Datetime";
     public static final String BOOLEAN = "Boolean";
     public static final String CODED = "Coded";

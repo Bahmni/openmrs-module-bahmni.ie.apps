@@ -121,7 +121,7 @@ public class BahmniPDFFormImplTest {
 
     @Test
     public void shouldAddCodedField() throws IOException {
-        bahmniPDFForm.addCodedField("Coded", Arrays.asList("code1", "code2", "code3", "code4", "code5"));
+        bahmniPDFForm.addCodedField("Coded", Arrays.asList("code1", "code2"));
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
@@ -129,8 +129,5 @@ public class BahmniPDFFormImplTest {
 
         assertThat(textFromPage, containsString("code1"));
         assertThat(textFromPage, containsString("code2"));
-        assertThat(textFromPage, containsString("code3"));
-        assertThat(textFromPage, containsString("code4"));
-        assertThat(textFromPage, containsString("code5"));
     }
 }
