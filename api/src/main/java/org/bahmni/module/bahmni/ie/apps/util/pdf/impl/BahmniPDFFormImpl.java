@@ -77,12 +77,15 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addTextField(String textFieldLabel) {
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
 
-        String TableStyles = pdfFormConfig.getTableStyles();
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
 
-        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
-
-        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
 
         pdfFormConfig.setMinimumWidth(60);
         pdfFormConfig.setWidth(60);
@@ -103,12 +106,15 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addNumericField(String numericFieldLabel, String unit) {
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
 
-        String TableStyles = pdfFormConfig.getTableStyles();
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
 
-        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
-
-        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
 
         pdfFormConfig.setWidth(50);
         pdfFormConfig.setMinimumWidth(50);
@@ -144,32 +150,16 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
     }
 
     @Override
-    public void addDateField(String dateFieldLabel) {
-        String TableStyles = pdfFormConfig.getTableStyles();
-
-        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
-
-        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
-
-        pdfFormConfig.setWidth(60);
-        pdfFormConfig.setMinimumWidth(60);
-        String dateBlankColumnLStyles = pdfFormConfig.getStyles();
-
-        String labelColumn = "<td " + labelColumnStyles + ">" + dateFieldLabel +" (dd/mm/yyyy)"+ "</td>";
-        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
-        String dateBlankColumn  = "<td "+dateBlankColumnLStyles+">__/___/____ </td>";
-
-        html += "<table  " +TableStyles+"><tr>"+labelColumn  + emptyColumn + dateBlankColumn +  "</tr></table>";
-        html += addLineBreak();
-    }
-
-    @Override
     public void addDateTimeField(String dateTimeFieldLabel) {
-        String TableStyles = pdfFormConfig.getTableStyles();
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
 
-        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
 
-        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
 
         pdfFormConfig.setWidth(60);
         pdfFormConfig.setMinimumWidth(60);
@@ -180,6 +170,30 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         String dateTimeBlankColumn  = "<td "+dateTimeBlankColumnLStyles+">__/___/____ , __:__ AM/PM</td>";
 
         html += "<table  " +TableStyles+"><tr>"+labelColumn  + emptyColumn + dateTimeBlankColumn +  "</tr></table>";
+        html += addLineBreak();
+    }
+
+    @Override
+    public void addDateField(String dateFieldLabel) {
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(60);
+        pdfFormConfig.setMinimumWidth(60);
+        String dateBlankColumnLStyles = pdfFormConfig.getStyles();
+
+        String labelColumn = "<td " + labelColumnStyles + ">" + dateFieldLabel +" (dd/mm/yyyy)"+ "</td>";
+        String emptyColumn = "<td " + emptyColumnStyles + "></td>";
+        String dateBlankColumn  = "<td "+dateBlankColumnLStyles+">__/___/____ </td>";
+
+        html += "<table  " +TableStyles+"><tr>"+labelColumn  + emptyColumn + dateBlankColumn +  "</tr></table>";
         html += addLineBreak();
     }
 
@@ -200,7 +214,6 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setCheckBox(20, 20, 50, 1);
         String checkBoxStyle = pdfFormConfig.getStyles();
 
-
         String labelColumn = "<td " + labelColumnStyles + ">" + booleanFieldLabel + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String contentColumn = "<td " + checkBoxStyle + "> </td> <td>Yes</td> <td " + checkBoxStyle + "> </td> <td>No</td>";
@@ -212,36 +225,31 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addCodedField(String codedFieldLabel, List<String> codes) {
-        String TableStyles = pdfFormConfig.getTableStyles();
 
+        pdfFormConfig.setMaximumWidth(100);
+        pdfFormConfig.setWidth(100);
+        String TableStyles = pdfFormConfig.getStyles();
 
-        String labelColumnStyles = pdfFormConfig.getLabelColumnStyles();
+        pdfFormConfig.setWidth(35);
+        String labelColumnStyles = pdfFormConfig.getStyles();
 
-        String emptyColumnStyles = pdfFormConfig.getEmptyColumnStyles();
+        pdfFormConfig.setWidth(5);
+        String emptyColumnStyles = pdfFormConfig.getStyles();
+
+        pdfFormConfig.setWidth(60);
+        pdfFormConfig.setCheckBox(20, 20, 50, 1);
+        String checkBoxStyle = pdfFormConfig.getStyles();
 
         String labelColumn = "<td " + labelColumnStyles + ">" + codedFieldLabel + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
 
-        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + generateDynamicCode(codes) + "</tr></table>";
-
-        html += addLineBreak();
-    }
-
-    private String generateDynamicCode(List<String> codes) {
-        String checkBoxStyle = "\"float: left;height: 20px;width: 20px;margin-bottom: 15px;border: 1px solid black;clear: both;\"";
-        StringBuilder codeHtml = new StringBuilder();
+        html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + "</tr>";
         for (int index = 0; index < codes.size(); index++) {
-            if (index % 2 == 0) {
-                if (index != 0) {
-                    codeHtml.append("<td></td>");
-                }
-                codeHtml.append("<td style=").append(checkBoxStyle).append("> </td> <td>").append(codes.get(index)).append("</td>");
-            } else {
-                codeHtml.append("<td style=").append(checkBoxStyle).append("> </td> <td>").append(codes.get(index)).append("</td>");
-                codeHtml.append("</tr><tr>");
-            }
+            html += "<tr>" + emptyColumn + "<td " + checkBoxStyle + " ></td><td><label>" + codes.get(index) + "</label></td></tr>";
+            html += "<tr>" + emptyColumn + "</tr>";
         }
-        return codeHtml.toString();
+        html += "</table>";
+        html += addLineBreak();
     }
 
     private String addLineBreak() {
