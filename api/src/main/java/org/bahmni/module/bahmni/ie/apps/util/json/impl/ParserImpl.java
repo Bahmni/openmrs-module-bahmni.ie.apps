@@ -21,9 +21,11 @@ public class ParserImpl implements Parser {
         String title = (String) ((JSONObject) jsonObject.get(FORM_JSON)).get(NAME);
         bahmniPDFForm.setTitle(title);
 
-        JSONArray resources = (JSONArray) jsonObject.get(RESOURCES);
+        JSONArray resources = (JSONArray) ((JSONObject) jsonObject.get(FORM_JSON)).get(RESOURCES);
         JSONObject resource = (JSONObject) resources.get(0);
-        JSONArray controls = (JSONArray) ((JSONObject) resource.get(VALUE)).get(CONTROLS);
+        String resourceString = resource.getString(VALUE);
+        JSONObject resourceObject = new JSONObject(resourceString);
+        JSONArray controls = (JSONArray) resourceObject.get(CONTROLS);
 
         for (int i = 0; i < controls.length(); i++) {
             JSONObject controlJSON = (JSONObject) controls.get(i);
