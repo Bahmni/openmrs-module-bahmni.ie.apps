@@ -56,6 +56,19 @@
 			<version>${jsonVersion}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4jVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4jVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- End OpenMRS core -->
 
 	</dependencies>

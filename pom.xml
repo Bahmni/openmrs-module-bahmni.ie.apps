@@ -46,6 +46,7 @@
 		<openMRSWebServicesVersion>2.24.0</openMRSWebServicesVersion>
 		<jsonVersion>20160212</jsonVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4jVersion>2.17.1</log4jVersion>
 	</properties>
 
 	<distributionManagement>
@@ -195,7 +196,7 @@
 		<repository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 		<repository>
 			<id>sonatype-nexus-snapshots</id>
@@ -226,7 +227,7 @@
 		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
