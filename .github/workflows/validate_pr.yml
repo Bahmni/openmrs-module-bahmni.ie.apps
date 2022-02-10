@@ -4,8 +4,7 @@ on:
   pull_request:
     branches: 
     - master
-    - BAH-1384
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
