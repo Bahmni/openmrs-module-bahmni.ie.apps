@@ -1,4 +1,4 @@
-name: Build and generate artifacts for openmrs-module-bahmni.ie.apps
+name: Build and Publish
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
     - master
         
 jobs:
-  build:
+  build-publish:
+    name: Build & Pulish
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
