@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.bahmni.module.bahmni.ie.apps.model">
+    <class name="FormPrivilege" table="form_privilege" >
+        <id name="form_privilege_id" type="java.lang.Integer" column="form_privilege_id">
+            <generator class="native">
+                <param name="sequence">form_privilege_id_seq</param>
+            </generator>
+        </id>
+        <property name="formId" type="java.lang.Integer" column="formId" length="1000"/>
+        <property name="formVersion" type="java.lang.String" column="formVersion" length="1000"/>
+        <property name="privilegeName" type="java.lang.String" column="privilegeName" length="1000"/>
+        <property name="editable" type="java.lang.Boolean" column="editable" length="1" not-null="true" />
+        <property name="viewable" type="java.lang.Boolean" column="viewable" length="1" not-null="true" />
+        <property name="dateCreated" type="java.util.Date" column="date_created"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed"/>
+        </class>
+</hibernate-mapping>

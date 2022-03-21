@@ -24,6 +24,10 @@
     <!-- Module Activator -->
     <activator>org.bahmni.module.bahmni.ie.apps.BahmniIEAppsActivator</activator>
 
+    <mappingFiles>
+        FormPrivilege.hbm.xml
+    </mappingFiles>
+
     <globalProperty>
         <property>bahmni.forms.directory</property>
         <defaultValue>/home/bahmni/clinical_forms/</defaultValue>

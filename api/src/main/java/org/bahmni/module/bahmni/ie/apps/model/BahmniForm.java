@@ -10,6 +10,16 @@ public class BahmniForm {
     private Integer id;
     private List<BahmniFormResource> resources;
 
+    public List<FormPrivilege> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(List<FormPrivilege> privileges) {
+        this.privileges = privileges;
+    }
+
+    private List<FormPrivilege> privileges;
+
     private String nameTranslation;
 
     public BahmniForm(){}

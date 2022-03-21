@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class BahmniFormMapper {
+public class BahmniFormMapper   {
     public BahmniFormResource map(FormResource formResource) {
         BahmniFormResource bahmniFormResource = new BahmniFormResource();
         bahmniFormResource.setValue(formResource.getValue().toString());
@@ -26,6 +26,7 @@ public class BahmniFormMapper {
         bahmniForm.setUuid(form.getUuid());
         bahmniForm.setVersion(form.getVersion());
         bahmniForm.setPublished(form.getPublished());
+        bahmniForm.setId(form.getFormId());
         return bahmniForm;
     }
 
@@ -53,4 +54,6 @@ public class BahmniFormMapper {
         }
         return formResources;
     }
+
+
 }

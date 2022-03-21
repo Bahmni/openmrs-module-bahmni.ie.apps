@@ -2,7 +2,8 @@ package org.bahmni.module.bahmni.ie.apps.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.customdatatype.datatype.FileSystemStorageDatatype;
 import org.bahmni.customdatatype.datatype.FormNameTranslationDatatype;
 import org.bahmni.module.bahmni.ie.apps.Constants;
@@ -57,7 +58,7 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
 
     private final String GP_BAHMNI_FORM_PATH_JSON = "bahmni.forms.directory";
 
-    private static Logger logger = Logger.getLogger(BahmniFormServiceImpl.class);
+    private static Logger logger = LogManager.getLogger(BahmniFormServiceImpl.class);
 
     @Autowired
     public BahmniFormServiceImpl(FormService formService, BahmniFormDao bahmniFormDao,
@@ -190,6 +191,11 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
         if (!isEmpty(value))
             formResource = formService.saveFormResource(formResource);
         return new BahmniFormMapper().map(formResource);
+    }
+
+    @Override
+    public Form getFormDetailsFromFormName(String formName, String formVersion){
+        return formService.getForm(formName,formVersion);
     }
 
     private String getFormResourceValue(BahmniFormResource bahmniFormResource, String referenceFormUuid) {
@@ -328,5 +334,10 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
             return (int) version;
         }
         return DEFAULT_VERSION;
+    }
+    @Override
+    public Form getFormsForGivenUuid(String formUuid) {
+        Form retreivedForm = bahmniFormDao.getFormsForGivenUuid(formUuid);
+        return retreivedForm;
     }
 }

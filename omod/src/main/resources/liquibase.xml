@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <!--
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+<changeSet id="bahmni-core-2020121350001" author="Buvaneswari">
+    <preConditions onFail="MARK_RAN">
+        <not><tableExists tableName="form_privilege"/></not>
+    </preConditions>
+    <createTable tableName="form_privilege">
+        <column autoIncrement="true" name="form_privilege_id" type="int"> <constraints nullable="false" primaryKey="true"/> </column>
+        <column name="formId" type="int"> <constraints nullable="false"/> </column>
+        <column name="formVersion" type="varchar(50)"> <constraints nullable="false"/> </column>
+        <column name="privilegeName" type="varchar(255)"> <constraints nullable="false"/></column>
+        <column name="editable" type="int"> <constraints nullable="true"/> </column>
+        <column name="viewable" type="int"> <constraints nullable="true"/> </column>
+        <column name="date_created" type="DATETIME"> <constraints nullable="false"/> </column>
+        <column name="date_changed" type="DATETIME"> <constraints nullable="true"/> </column>
+    </createTable>
+</changeSet>
+</databaseChangeLog>
