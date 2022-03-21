@@ -9,6 +9,7 @@ public class FieldMapper {
     public static final Map<String, IField> stringToFieldMap = new HashMap() {{
         put("Text", new TextField());
         put("Numeric", new NumericField());
+        put("Date", new DateField());
         put("Datetime", new DatetimeField());
         put("Boolean", new BooleanField());
         put("Coded", new CodedField());

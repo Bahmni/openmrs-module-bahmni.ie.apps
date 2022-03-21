@@ -106,6 +106,16 @@ public class BahmniPDFFormImplTest {
         assertThat(textFromPage, containsString("AM/PM"));
     }
 
+    @Test
+    public void shouldAddDateField() throws IOException {
+        bahmniPDFForm.addDateField("Date");
+        String filename = bahmniPDFForm.create();
+        PdfReader reader = new PdfReader(filename);
+
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+
+        assertThat(textFromPage, containsString("Date"));
+    }
 
     @Test
     public void shouldAddBooleanField() throws IOException {
