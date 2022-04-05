@@ -25,7 +25,6 @@ public class BahmniFormDaoImpl implements BahmniFormDao {
 
 	private SessionFactory sessionFactory;
 
-	@Autowired
 	public BahmniFormDaoImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
