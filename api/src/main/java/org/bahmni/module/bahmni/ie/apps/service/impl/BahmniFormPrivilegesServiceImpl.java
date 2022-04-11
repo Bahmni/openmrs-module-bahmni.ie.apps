@@ -19,14 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@Service("bahmniFormPrivilegesService")
 public class BahmniFormPrivilegesServiceImpl extends BaseOpenmrsService implements BahmniFormPrivilegesService {
 
     private BahmniFormPrivilegeDao bahmniFormPrivilegeDao;
     protected Log log = LogFactory.getLog(getClass());
     private BahmniFormPrivilegesService bahmniFormPrivilegesService;
 
-    @Autowired
     public BahmniFormPrivilegesServiceImpl(BahmniFormPrivilegeDao bahmniFormPrivilegeDao) {
         this.bahmniFormPrivilegeDao = bahmniFormPrivilegeDao;
         this.bahmniFormPrivilegesService = bahmniFormPrivilegesService;
