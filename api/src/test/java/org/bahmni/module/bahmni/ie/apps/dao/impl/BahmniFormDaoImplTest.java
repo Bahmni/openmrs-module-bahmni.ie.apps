@@ -1,8 +1,8 @@
 package org.bahmni.module.bahmni.ie.apps.dao.impl;
 
 import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormDao;
+import org.hibernate.query.Query;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.ResultTransformer;
