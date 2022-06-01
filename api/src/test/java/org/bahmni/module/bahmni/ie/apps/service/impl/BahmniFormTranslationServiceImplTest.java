@@ -159,14 +159,13 @@ public class BahmniFormTranslationServiceImplTest {
 		bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Collections.singletonList(formTranslation)));
 	}
 
-	@Ignore
 	@Test
 	public void shouldThrowAPIExceptionIfItUnableToSaveTranslations() throws Exception {
 		BahmniFormTranslationService bahmniFormTranslationService = new BahmniFormTranslationServiceImpl();
 		FormTranslation formTranslation = createFormTranslation("en",  "test_form");
 		setTranslationPath("/var/www/blah/blah");
 		expectedException.expect(APIException.class);
-		expectedException.expectMessage("/test_form.json' could not be created");
+		expectedException.expectMessage("Directory '/var/www/blah/blah' could not be created");
 		bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Collections.singletonList(formTranslation)));
 	}
 
