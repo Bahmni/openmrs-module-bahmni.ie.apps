@@ -342,14 +342,13 @@ public class BahmniFormServiceImplTest {
         verify(formService).saveFormResource(formResource);
     }
 
-    @Ignore
     @Test
     public void shouldReturnAllForms() {
         BahmniForm form1 = MotherForm.createBahmniForm("FormName-1", "FormUuid1", "1", true);
         BahmniForm form2 = MotherForm.createBahmniForm("FormName-1", "FormUuid2", "2", true);
         BahmniForm form3 = MotherForm.createBahmniForm("FormName-2", "FormUuid3", "1", true);
         BahmniForm form4 = MotherForm.createBahmniForm("FormName-3", "FormUuid4", "1", false);
-        when(bahmniFormDao.formsWithNameTransaltionsFor(any(String.class), any(Boolean.class), any(Boolean.class)))
+        when(bahmniFormDao.formsWithNameTransaltionsFor(eq(null), eq(false), eq(false)))
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
 
         List<BahmniForm> bahmniForms = service.getAllForms();
