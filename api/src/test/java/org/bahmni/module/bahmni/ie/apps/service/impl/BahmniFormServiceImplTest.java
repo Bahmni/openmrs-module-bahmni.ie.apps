@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,6 +27,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -53,6 +53,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
+@PowerMockIgnore("javax.management.*")
 public class BahmniFormServiceImplTest {
 
     @Mock
@@ -348,7 +349,7 @@ public class BahmniFormServiceImplTest {
         BahmniForm form2 = MotherForm.createBahmniForm("FormName-1", "FormUuid2", "2", true);
         BahmniForm form3 = MotherForm.createBahmniForm("FormName-2", "FormUuid3", "1", true);
         BahmniForm form4 = MotherForm.createBahmniForm("FormName-3", "FormUuid4", "1", false);
-        when(bahmniFormDao.formsWithNameTransaltionsFor(eq(null), eq(false), eq(false)))
+        when(bahmniFormDao.formsWithNameTransaltionsFor(any(), any(Boolean.class), any(Boolean.class)))
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
 
         List<BahmniForm> bahmniForms = service.getAllForms();
