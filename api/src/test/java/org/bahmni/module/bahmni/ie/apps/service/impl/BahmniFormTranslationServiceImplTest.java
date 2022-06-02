@@ -655,7 +655,6 @@ public class BahmniFormTranslationServiceImplTest {
 		assertNotEquals(FileUtils.readFileToString(new File(translationsFilePath)), expected);
 	}
 
-	@Ignore
 	@Test
 	public void shouldSupportAllSpecialCharactersWithoutUTF8() throws IllegalAccessException, NoSuchFieldException, IOException {
 		String tempTranslationsPath = createTempFolder();
