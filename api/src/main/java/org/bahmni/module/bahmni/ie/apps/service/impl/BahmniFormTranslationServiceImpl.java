@@ -41,6 +41,7 @@ import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Service
 public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService implements BahmniFormTranslationService {
 
 	private FormService formService;
@@ -51,6 +52,7 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
 
 	private final String DESC_TRANS_KEY_PATTERN = "_[0-9]+_DESC$";
 
+	@Autowired
 	public BahmniFormTranslationServiceImpl(FormService formService) {
 		this.formService = formService;
 	}

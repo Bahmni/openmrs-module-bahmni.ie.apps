@@ -20,65 +20,20 @@
 	<!-- Add here beans related to the API context -->
 	<context:component-scan base-package="org.bahmni.module.bahmni.ie.apps"/>
 
-	<bean id="bahmniFormService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager"/>
-		</property>
-		<property name="target">
-			<bean class="org.bahmni.module.bahmni.ie.apps.service.impl.BahmniFormServiceImpl">
-				<constructor-arg ref="formService"/>
-				<constructor-arg ref="bahmniFormDao"/>
-				<constructor-arg ref="administrationService"/>
-				<constructor-arg ref="bahmniFormTranslationService"/>
-			</bean>
-		</property>
-		<property name="preInterceptors">
-			<ref bean="serviceInterceptors"/>
-		</property>
-		<property name="transactionAttributeSource">
-			<ref bean="transactionAttributeSource"/>
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.bahmni.module.bahmni.ie.apps.service.BahmniFormService</value>
+				<ref bean="bahmniFormService"/>
+			</list>
 		</property>
 	</bean>
-
-	<bean id="bahmniFormPrivilegesService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager"/>
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.bahmni.module.bahmni.ie.apps.service.BahmniFormPrivilegesService</value>
+				<ref bean="bahmniFormPrivilegesService"/>
+			</list>
 		</property>
-		<property name="target">
-			<bean class="org.bahmni.module.bahmni.ie.apps.service.impl.BahmniFormPrivilegesServiceImpl">
-				<constructor-arg ref="bahmniFormPrivilegeDao"/>
-			</bean>
-		</property>
-		<property name="preInterceptors">
-			<ref bean="serviceInterceptors"/>
-		</property>
-		<property name="transactionAttributeSource">
-			<ref bean="transactionAttributeSource"/>
-		</property>
-	</bean>
-
-	<bean id="bahmniFormTranslationService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager"/>
-		</property>
-		<property name="target">
-			<bean class="org.bahmni.module.bahmni.ie.apps.service.impl.BahmniFormTranslationServiceImpl">
-				<constructor-arg ref="formService"/>
-			</bean>
-		</property>
-		<property name="preInterceptors">
-			<ref bean="serviceInterceptors"/>
-		</property>
-		<property name="transactionAttributeSource">
-			<ref bean="transactionAttributeSource"/>
-		</property>
-	</bean>
-
-	<bean id="bahmniFormPrivilegeDao" class="org.bahmni.module.bahmni.ie.apps.dao.impl.BahmniFormPrivilegeDaoImpl" >
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
-
-	<bean id="bahmniFormDao" class="org.bahmni.module.bahmni.ie.apps.dao.impl.BahmniFormDaoImpl" >
-		<constructor-arg ref="sessionFactory"/>
 	</bean>
 </beans>
