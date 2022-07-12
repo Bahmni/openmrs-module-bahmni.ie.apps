@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
+@Service("bahmniFormService")
 public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniFormService {
 
     private FormService formService;
@@ -59,6 +60,7 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
 
     private static Logger logger = LogManager.getLogger(BahmniFormServiceImpl.class);
 
+    @Autowired
     public BahmniFormServiceImpl(FormService formService, BahmniFormDao bahmniFormDao,
                                  @Qualifier("adminService") AdministrationService administrationService,
                                  BahmniFormTranslationService bahmniFormTranslationService) {

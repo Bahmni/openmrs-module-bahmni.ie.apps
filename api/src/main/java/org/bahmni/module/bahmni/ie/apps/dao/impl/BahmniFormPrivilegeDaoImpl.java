@@ -18,6 +18,7 @@ public class BahmniFormPrivilegeDaoImpl implements BahmniFormPrivilegeDao {
 
     private SessionFactory sessionFactory;
 
+    @Autowired
     public BahmniFormPrivilegeDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -48,7 +49,7 @@ public class BahmniFormPrivilegeDaoImpl implements BahmniFormPrivilegeDao {
     @Override
     @Transactional
     public FormPrivilege saveFormPrivilege(FormPrivilege formPrivilege) {
-        sessionFactory.getCurrentSession().saveOrUpdate(formPrivilege);
+        sessionFactory.getCurrentSession().saveOrUpdate(formPrivilege);        
         return formPrivilege;
     }
 
