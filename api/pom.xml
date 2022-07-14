@@ -68,6 +68,12 @@
 			<version>${log4jVersion}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javaxServletVersion}</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- End OpenMRS core -->
 

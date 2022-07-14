@@ -42,11 +42,12 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>2.1.6</openMRSVersion>
-		<openMRSWebServicesVersion>2.24.0</openMRSWebServicesVersion>
+		<openMRSVersion>2.4.2</openMRSVersion>
+		<openMRSWebServicesVersion>2.29.0</openMRSWebServicesVersion>
 		<jsonVersion>20160212</jsonVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4jVersion>2.17.1</log4jVersion>
+		<javaxServletVersion>4.0.1</javaxServletVersion>
 	</properties>
 
 	<distributionManagement>
@@ -90,8 +91,13 @@
 				<version>${openMRSVersion}</version>
 				<type>jar</type>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
-
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
@@ -136,9 +142,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.19.1</version>
-					<configuration>
-						<testFailureIgnore>true</testFailureIgnore>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.openmrs.maven.plugins</groupId>

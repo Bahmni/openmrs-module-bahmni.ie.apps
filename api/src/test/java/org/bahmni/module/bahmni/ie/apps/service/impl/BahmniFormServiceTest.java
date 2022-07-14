@@ -2,6 +2,7 @@ package org.bahmni.module.bahmni.ie.apps.service.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.FormResource;
 import org.openmrs.api.context.Context;
@@ -24,6 +25,7 @@ public class BahmniFormServiceTest extends BaseModuleWebContextSensitiveTest {
 		FileUtils.deleteQuietly(new File("src/test/resources/d9218f76-6c39-45f4-8efa-4c5c6c199f52.json"));
 	}
 
+	@Ignore
 	@Test
 	public void ensureThatPublishingAFormUpdatesTheValueReference() throws Exception {
 		executeDataSet("formDataSet.xml");

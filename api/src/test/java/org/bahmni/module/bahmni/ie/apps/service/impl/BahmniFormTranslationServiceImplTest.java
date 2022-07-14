@@ -2,10 +2,7 @@ package org.bahmni.module.bahmni.ie.apps.service.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.bahmni.module.bahmni.ie.apps.validator.BahmniFormUtils;
-import org.bahmni.module.bahmni.ie.apps.service.impl.BahmniFormTranslationServiceImpl;
-import org.json.JSONObject;
 import org.bahmni.module.bahmni.ie.apps.MotherForm;
-import org.bahmni.module.bahmni.ie.apps.model.FormNameTranslation;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +27,7 @@ import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormTranslationService;
 import org.openmrs.customdatatype.NotYetPersistedException;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -53,6 +51,7 @@ import static org.mockito.Mockito.when;
 
 @PrepareForTest({Context.class, BahmniFormUtils.class})
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore("javax.management.*")
 public class BahmniFormTranslationServiceImplTest {
 
 	@Mock
@@ -165,7 +164,7 @@ public class BahmniFormTranslationServiceImplTest {
 		FormTranslation formTranslation = createFormTranslation("en",  "test_form");
 		setTranslationPath("/var/www/blah/blah");
 		expectedException.expect(APIException.class);
-		expectedException.expectMessage("/test_form.json' could not be created");
+		expectedException.expectMessage("Directory '/var/www/blah/blah' could not be created");
 		bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Collections.singletonList(formTranslation)));
 	}
 
