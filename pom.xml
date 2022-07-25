@@ -42,7 +42,7 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>2.4.2</openMRSVersion>
+		<openMRSVersion>2.5.0</openMRSVersion>
 		<openMRSWebServicesVersion>2.29.0</openMRSWebServicesVersion>
 		<jsonVersion>20160212</jsonVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

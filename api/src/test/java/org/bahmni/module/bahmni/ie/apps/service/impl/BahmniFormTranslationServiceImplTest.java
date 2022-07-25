@@ -158,7 +158,7 @@ public class BahmniFormTranslationServiceImplTest {
 		bahmniFormTranslationService.saveFormTranslation(new ArrayList<>(Collections.singletonList(formTranslation)));
 	}
 
-	@Test
+	@Test(expected = APIException.class)
 	public void shouldThrowAPIExceptionIfItUnableToSaveTranslations() throws Exception {
 		BahmniFormTranslationService bahmniFormTranslationService = new BahmniFormTranslationServiceImpl();
 		FormTranslation formTranslation = createFormTranslation("en",  "test_form");
