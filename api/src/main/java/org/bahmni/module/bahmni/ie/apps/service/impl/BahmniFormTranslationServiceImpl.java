@@ -344,7 +344,7 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
 		List<Concept> conceptsByName = conceptService.getConceptsByName(conceptName);
 		for (Concept concept : conceptsByName) {
 			ConceptName name = concept.getName();
-			if (concept.getName().getConceptNameType().equals(ConceptNameType.FULLY_SPECIFIED) && name.getName()
+			if (ConceptNameType.FULLY_SPECIFIED.equals(concept.getName().getConceptNameType()) && name.getName()
 					.equalsIgnoreCase(conceptName)) {
 				return concept;
 			}
