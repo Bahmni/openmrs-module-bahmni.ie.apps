@@ -2,6 +2,7 @@ package org.bahmni.module.bahmni.ie.apps.service.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.bahmni.module.bahmni.ie.apps.validator.BahmniFormUtils;
+import org.bahmni.module.bahmni.ie.apps.model.FormNameTranslation;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
@@ -87,17 +88,15 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
 			if (hasReferenceForm && referenceFormIsNotTheCurrentForm) {
 				File referenceVersionFile = translationFileFor(firstTranslation.getFormName(),
 						firstTranslation.getReferenceVersion(), firstTranslation.getReferenceFormUuid());
-
 				if(referenceVersionFile.exists()) {
 					JSONObject refVersionTranslationsJson = existingTranslationsFrom(referenceVersionFile);
 					if (!refVersionTranslationsJson.keySet().isEmpty())
 						updateTranslationsWithRefVersion(firstTranslation, translationsJson, refVersionTranslationsJson);
-				} else {
-					 translationsJson = existingTranslationsFrom(translationFile);
 				}
 			}
 			saveTranslationsToFile(translationsJson, translationFile);
 		}
+
 		return formTranslations;
 	}
 
@@ -227,9 +226,8 @@ public class BahmniFormTranslationServiceImpl extends BaseOpenmrsService impleme
 
 	private File translationFileFor(String formName, String formVersion, String formUuid) {
 		File file = null;
-		if (isNotEmpty(formUuid)) {
+		if (isNotEmpty(formUuid))
 			file = new File(getFileName(formUuid));
-		}
 		if (file == null || !file.exists()) {
 			file = new File(getFileName(formName, formVersion));
 		}
