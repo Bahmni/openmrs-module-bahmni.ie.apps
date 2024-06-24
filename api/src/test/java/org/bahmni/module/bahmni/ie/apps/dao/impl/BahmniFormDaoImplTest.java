@@ -92,7 +92,7 @@ public class BahmniFormDaoImplTest {
         verify(session).createQuery(   "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name, F.formId as id, " +
                 "F.uuid as uuid, F.version as version, F.published as published from FormResource FR right outer join " +
                 "FR.form F with FR.datatypeClassname!='org.bahmni.customdatatype.datatype.FileSystemStorageDatatype' " +
-                "where    F.name='FormName' order by F.name asc, F.version desc");
+                "where    name= FormName order by F.name asc, F.version desc");
     }
 
     @Test
@@ -106,6 +106,6 @@ public class BahmniFormDaoImplTest {
         verify(session).createQuery(   "Select COALESCE(FR.valueReference,'[]') as nameTranslation, F.name as name, F.formId as id," +
                 " F.uuid as uuid, F.version as version, F.published as published from FormResource FR right outer join " +
                 "FR.form F with FR.datatypeClassname!='org.bahmni.customdatatype.datatype.FileSystemStorageDatatype' " +
-                "where  F.published=true and F.retired=false  and F.name='FormName' order by F.name asc, F.version desc");
+                "where  F.published=true and F.retired=false  and name= FormName order by F.name asc, F.version desc");
     }
 }

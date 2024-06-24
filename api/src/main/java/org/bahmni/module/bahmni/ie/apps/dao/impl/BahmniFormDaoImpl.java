@@ -74,7 +74,7 @@ public class BahmniFormDaoImpl implements BahmniFormDao {
 		String publishedQueryCondition=  filterPublishedForms ? "F.published=true" : "";
 		String retiredQueryCondition= includeRetired? "" : filterPublishedForms ?  "and F.retired=false " : "F.retired=false" ;
 		String formNameQueryCondition= filterByFormName ? !includeRetired || filterPublishedForms ?
-				"and F.name="+"'"+ formName +"'" : "F.name="+"'"+ formName + "'" : "";
+				"and name= "+ formName : "name= "+ formName : "";
 
 		Query query =  currentSession.createQuery( String.format("Select COALESCE(FR.valueReference,'[]') as nameTranslation, " +
 				"F.name as name, F.formId as id, F.uuid as uuid, F.version as version, F.published as published " +
