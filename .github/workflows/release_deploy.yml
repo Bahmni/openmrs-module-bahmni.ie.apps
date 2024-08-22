@@ -18,6 +18,16 @@ jobs:
           server-username: NEXUS_USERNAME
           server-password: NEXUS_PASSWORD
           gpg-private-key: ${{ secrets.BAHMNI_INFRA_GPG_KEY }}
+      - name: Compare Git tag with Maven version
+        run: |
+          export GIT_TAG=${GITHUB_REF#refs/tags/}
+          PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          if [ "$PROJECT_VERSION" != "$GIT_TAG" ]; then
+            echo "❌ The Git tag ($GIT_TAG) does not match the Maven version ($VERSION)."
+            exit 1
+          else
+            echo "✅ The Git tag matches the Maven version."
+          fi
 
       - name: Build and deploy with Maven
         run: ./mvnw --no-transfer-progress clean -U deploy -DperformRelease=true
