@@ -17,11 +17,11 @@ jobs:
           server-id: nexus-sonatype
           server-username: NEXUS_USERNAME
           server-password: NEXUS_PASSWORD
-          gpg-private-key: ${{ secrets.INFRA_GPG_KEY }}
+          gpg-private-key: ${{ secrets.BAHMNI_INFRA_GPG_KEY }}
 
       - name: Build and deploy with Maven
         run: ./mvnw --no-transfer-progress clean -U deploy -DperformRelease=true
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          GPG_PASSPHRASE: ${{ secrets.INFRA_GPG_PASSPHRASE }}
+          GPG_PASSPHRASE: ${{ secrets.BAHMNI_INFRA_GPG_PASSPHRASE }}
