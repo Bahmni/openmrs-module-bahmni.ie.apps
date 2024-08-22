@@ -23,7 +23,7 @@ jobs:
           export GIT_TAG=${GITHUB_REF#refs/tags/}
           PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [ "$PROJECT_VERSION" != "$GIT_TAG" ]; then
-            echo "❌ The Git tag ($GIT_TAG) does not match the Maven version ($VERSION)."
+            echo "❌ The Git tag ($GIT_TAG) does not match the Maven version ($PROJECT_VERSION)."
             exit 1
           else
             echo "✅ The Git tag matches the Maven version."
