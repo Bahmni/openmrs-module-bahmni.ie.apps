@@ -4,7 +4,7 @@
 
 	<groupId>org.bahmni.module</groupId>
 	<artifactId>bahmni.ie.apps</artifactId>
-	<version>1.4.0-SNAPSHOT</version>
+	<version>1.4.0</version>
 	<packaging>pom</packaging>
 	<name>bahmni.ie.apps Module</name>
 	<description>Services to support Implementer Interface Module</description>
