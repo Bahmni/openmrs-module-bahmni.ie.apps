@@ -6,6 +6,7 @@ import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormDao;
 import org.bahmni.module.bahmni.ie.apps.mapper.BahmniFormMapper;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormSearchParams;
 import org.bahmni.module.bahmni.ie.apps.model.ExportResponse;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
@@ -207,8 +208,7 @@ public class BahmniFormServiceImplTest {
         BahmniForm form4 = MotherForm.createBahmniForm("FormName", "FormUuid4", "4", true);
         when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
-
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, null);
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, null, null));
 
         assertNotNull(bahmniForms);
         assertEquals(1, bahmniForms.size());
@@ -230,7 +230,7 @@ public class BahmniFormServiceImplTest {
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(new BahmniFormSearchParams());
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("2"));
@@ -254,7 +254,7 @@ public class BahmniFormServiceImplTest {
 
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, "encounterUuid", null));
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("2"));
@@ -282,7 +282,7 @@ public class BahmniFormServiceImplTest {
 
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, "encounterUuid", null));
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("1"));
@@ -536,6 +536,14 @@ public class BahmniFormServiceImplTest {
 
         assertEquals("", updatedBahmniFormResource.getValue());
         verify(formService, times(0)).saveFormResource(any());
+    }
+
+    private BahmniFormSearchParams mapSearchParams(boolean includeRetired, String encounterUuid, String episodeUuid) {
+        BahmniFormSearchParams searchParams = new BahmniFormSearchParams();
+        searchParams.setEncounterUuid(encounterUuid);
+        searchParams.setEpisodeUuid(episodeUuid);
+        searchParams.setIncludeRetired(includeRetired);
+        return searchParams;
     }
 
 }

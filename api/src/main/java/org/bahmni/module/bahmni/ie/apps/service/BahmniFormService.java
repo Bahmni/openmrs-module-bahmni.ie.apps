@@ -2,6 +2,7 @@ package org.bahmni.module.bahmni.ie.apps.service;
 
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormSearchParams;
 import org.bahmni.module.bahmni.ie.apps.model.ExportResponse;
 import org.openmrs.Form;
 import org.openmrs.api.OpenmrsService;
@@ -14,7 +15,7 @@ public interface BahmniFormService extends OpenmrsService {
 
     BahmniForm publish(String formUuid);
 
-    List<BahmniForm> getAllLatestPublishedForms(boolean includeRetired, String encounterUuid);
+    List<BahmniForm> getAllLatestPublishedForms(BahmniFormSearchParams searchParams);
 
     List<BahmniForm> getAllForms();
 

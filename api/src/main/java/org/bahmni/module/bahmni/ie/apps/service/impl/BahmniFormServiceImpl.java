@@ -12,6 +12,7 @@ import org.bahmni.module.bahmni.ie.apps.mapper.BahmniFormMapper;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormData;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormSearchParams;
 import org.bahmni.module.bahmni.ie.apps.model.ExportResponse;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
@@ -129,10 +130,11 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
     }
 
     @Override
-    public List<BahmniForm> getAllLatestPublishedForms(boolean includeRetired, String encounterUuid) {
-        List<BahmniForm> publishedFormsWithNameTranslation = bahmniFormDao.getAllPublishedFormsWithNameTranslation(includeRetired);
+    public List<BahmniForm> getAllLatestPublishedForms(BahmniFormSearchParams searchParams) {
+        List<BahmniForm> publishedFormsWithNameTranslation = bahmniFormDao.getAllPublishedFormsWithNameTranslation(searchParams.isIncludeRetired());
         List<BahmniForm> latestPublishedForms = getLatestFormByVersion(publishedFormsWithNameTranslation);
 
+        String encounterUuid = searchParams.getEncounterUuid();
         if (encounterUuid == null) {
             return latestPublishedForms;
         }
