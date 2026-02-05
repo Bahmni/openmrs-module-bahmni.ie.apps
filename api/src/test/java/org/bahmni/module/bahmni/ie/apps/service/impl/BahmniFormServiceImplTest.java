@@ -3,9 +3,13 @@ package org.bahmni.module.bahmni.ie.apps.service.impl;
 import org.bahmni.customdatatype.datatype.FileSystemStorageDatatype;
 import org.bahmni.module.bahmni.ie.apps.MotherForm;
 import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormDao;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilter;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilterParams;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilterRegistry;
 import org.bahmni.module.bahmni.ie.apps.mapper.BahmniFormMapper;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormSearchParams;
 import org.bahmni.module.bahmni.ie.apps.model.ExportResponse;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
@@ -42,7 +46,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -73,6 +79,9 @@ public class BahmniFormServiceImplTest {
     @Mock
     private BahmniFormTranslationService bahmniFormTranslationService;
 
+    @Mock
+    private BahmniFormFilterRegistry bahmniFormFilterRegistry;
+
     @Rule
     ExpectedException expectedException = ExpectedException.none();
 
@@ -81,7 +90,7 @@ public class BahmniFormServiceImplTest {
         initMocks(this);
         mockStatic(Context.class);
         PowerMockito.when(Context.getEncounterService()).thenReturn(encounterService);
-        service = new BahmniFormServiceImpl(formService, bahmniFormDao, administrationService, bahmniFormTranslationService);
+        service = new BahmniFormServiceImpl(formService, bahmniFormDao, administrationService, bahmniFormTranslationService, bahmniFormFilterRegistry);
     }
 
     @Test
@@ -207,8 +216,7 @@ public class BahmniFormServiceImplTest {
         BahmniForm form4 = MotherForm.createBahmniForm("FormName", "FormUuid4", "4", true);
         when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
-
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, null);
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, null, null));
 
         assertNotNull(bahmniForms);
         assertEquals(1, bahmniForms.size());
@@ -230,7 +238,7 @@ public class BahmniFormServiceImplTest {
                 .thenReturn(Arrays.asList(form1, form2, form3, form4));
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(new BahmniFormSearchParams());
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("2"));
@@ -254,7 +262,7 @@ public class BahmniFormServiceImplTest {
 
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, "encounterUuid", null));
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("2"));
@@ -282,7 +290,7 @@ public class BahmniFormServiceImplTest {
 
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, "encounterUuid", null));
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("1"));
@@ -313,7 +321,7 @@ public class BahmniFormServiceImplTest {
 
         when(encounterService.getEncounterByUuid("encounterUuid")).thenReturn(encounter);
 
-        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(false, "encounterUuid");
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, "encounterUuid", null));
 
         assertThat(bahmniForms.size(), is(2));
         assertThat(bahmniForms.get(0).getVersion(), is("2"));
@@ -536,6 +544,108 @@ public class BahmniFormServiceImplTest {
 
         assertEquals("", updatedBahmniFormResource.getValue());
         verify(formService, times(0)).saveFormResource(any());
+    }
+
+    @Test
+    public void shouldReturnLatestPublishedFormsWhenNoFilterRegistered() {
+        BahmniForm form1 = MotherForm.createBahmniForm("FormName1", "FormUuid1", "1", true);
+        BahmniForm form2 = MotherForm.createBahmniForm("FormName2", "FormUuid2", "1", true);
+
+        when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
+                .thenReturn(Arrays.asList(form1, form2));
+        when(bahmniFormFilterRegistry.getFilter()).thenReturn(null);
+
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, null, null));
+
+        assertEquals(2, bahmniForms.size());
+        assertEquals("FormName1", bahmniForms.get(0).getName());
+        assertEquals("FormName2", bahmniForms.get(1).getName());
+    }
+
+    @Test
+    public void shouldReturnFilteredFormsWhenFilterIsRegistered() {
+        BahmniForm form1 = MotherForm.createBahmniForm("FormName1", "FormUuid1", "1", true);
+        BahmniForm form2 = MotherForm.createBahmniForm("FormName2", "FormUuid2", "1", true);
+        BahmniForm filteredForm = MotherForm.createBahmniForm("FormName1", "FormUuid1", "1", true);
+
+        BahmniFormFilter mockFilter = mock(BahmniFormFilter.class);
+        when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
+                .thenReturn(Arrays.asList(form1, form2));
+        when(bahmniFormFilterRegistry.getFilter()).thenReturn(mockFilter);
+        when(mockFilter.filter(any(BahmniFormFilterParams.class))).thenReturn(Collections.singletonList(filteredForm));
+
+        List<BahmniForm> bahmniForms = service.getAllLatestPublishedForms(mapSearchParams(false, null, "episode-uuid-123"));
+
+        assertEquals(1, bahmniForms.size());
+        assertEquals("FormName1", bahmniForms.get(0).getName());
+        verify(mockFilter, times(1)).filter(any(BahmniFormFilterParams.class));
+    }
+
+    @Test
+    public void shouldPassCorrectParamsToFilterIncludingEpisodeUuid() {
+        BahmniForm form1 = MotherForm.createBahmniForm("FormName1", "FormUuid1", "1", true);
+        BahmniForm form2 = MotherForm.createBahmniForm("FormName2", "FormUuid2", "1", true);
+
+        BahmniFormFilter mockFilter = mock(BahmniFormFilter.class);
+        when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
+                .thenReturn(Arrays.asList(form1, form2));
+        when(bahmniFormFilterRegistry.getFilter()).thenReturn(mockFilter);
+        when(mockFilter.filter(any(BahmniFormFilterParams.class))).thenReturn(Arrays.asList(form1, form2));
+
+        Encounter encounter = new Encounter();
+        when(encounterService.getEncounterByUuid("encounter-uuid-456")).thenReturn(encounter);
+
+        ArgumentCaptor<BahmniFormFilterParams> paramsCaptor = ArgumentCaptor.forClass(BahmniFormFilterParams.class);
+
+        service.getAllLatestPublishedForms(mapSearchParams(true, "encounter-uuid-456", "episode-uuid-789"));
+
+        verify(mockFilter).filter(paramsCaptor.capture());
+
+        BahmniFormFilterParams capturedParams = paramsCaptor.getValue();
+        assertEquals("episode-uuid-789", capturedParams.getEpisodeUuid());
+        assertEquals("encounter-uuid-456", capturedParams.getEncounterUuid());
+        assertTrue(capturedParams.isIncludeRetired());
+        assertEquals(2, capturedParams.getLatestPublishedForms().size());
+    }
+
+    @Test
+    public void shouldPassLatestPublishedFormsToFilter() {
+        BahmniForm form1v1 = MotherForm.createBahmniForm("FormName1", "FormUuid1", "1", true);
+        BahmniForm form1v2 = MotherForm.createBahmniForm("FormName1", "FormUuid2", "2", true);
+        BahmniForm form2v1 = MotherForm.createBahmniForm("FormName2", "FormUuid3", "1", true);
+
+        BahmniFormFilter mockFilter = mock(BahmniFormFilter.class);
+        when(bahmniFormDao.getAllPublishedFormsWithNameTranslation(any(Boolean.class)))
+                .thenReturn(Arrays.asList(form1v1, form1v2, form2v1));
+        when(bahmniFormFilterRegistry.getFilter()).thenReturn(mockFilter);
+        when(mockFilter.filter(any(BahmniFormFilterParams.class))).thenAnswer(invocation -> {
+            BahmniFormFilterParams params = (BahmniFormFilterParams) invocation.getArguments()[0];
+            return params.getLatestPublishedForms();
+        });
+
+        ArgumentCaptor<BahmniFormFilterParams> paramsCaptor = ArgumentCaptor.forClass(BahmniFormFilterParams.class);
+
+        List<BahmniForm> result = service.getAllLatestPublishedForms(mapSearchParams(false, null, "episode-uuid"));
+
+        verify(mockFilter).filter(paramsCaptor.capture());
+
+        BahmniFormFilterParams capturedParams = paramsCaptor.getValue();
+        List<BahmniForm> latestForms = capturedParams.getLatestPublishedForms();
+
+        // Should have 2 forms: latest version of FormName1 (v2) and FormName2 (v1)
+        assertEquals(2, latestForms.size());
+        assertEquals("FormName1", latestForms.get(0).getName());
+        assertEquals("2", latestForms.get(0).getVersion());
+        assertEquals("FormName2", latestForms.get(1).getName());
+        assertEquals("1", latestForms.get(1).getVersion());
+    }
+
+    private BahmniFormSearchParams mapSearchParams(boolean includeRetired, String encounterUuid, String episodeUuid) {
+        BahmniFormSearchParams searchParams = new BahmniFormSearchParams();
+        searchParams.setEncounterUuid(encounterUuid);
+        searchParams.setEpisodeUuid(episodeUuid);
+        searchParams.setIncludeRetired(includeRetired);
+        return searchParams;
     }
 
 }

@@ -8,10 +8,14 @@ import org.bahmni.customdatatype.datatype.FileSystemStorageDatatype;
 import org.bahmni.customdatatype.datatype.FormNameTranslationDatatype;
 import org.bahmni.module.bahmni.ie.apps.Constants;
 import org.bahmni.module.bahmni.ie.apps.dao.BahmniFormDao;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilter;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilterParams;
+import org.bahmni.module.bahmni.ie.apps.formfilter.BahmniFormFilterRegistry;
 import org.bahmni.module.bahmni.ie.apps.mapper.BahmniFormMapper;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniForm;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormData;
 import org.bahmni.module.bahmni.ie.apps.model.BahmniFormResource;
+import org.bahmni.module.bahmni.ie.apps.model.BahmniFormSearchParams;
 import org.bahmni.module.bahmni.ie.apps.model.ExportResponse;
 import org.bahmni.module.bahmni.ie.apps.model.FormTranslation;
 import org.bahmni.module.bahmni.ie.apps.service.BahmniFormService;
@@ -25,6 +29,7 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -60,14 +65,18 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
 
     private static Logger logger = LogManager.getLogger(BahmniFormServiceImpl.class);
 
+    private BahmniFormFilterRegistry bahmniFormFilterRegistry;
+
     @Autowired
     public BahmniFormServiceImpl(FormService formService, BahmniFormDao bahmniFormDao,
                                  @Qualifier("adminService") AdministrationService administrationService,
-                                 BahmniFormTranslationService bahmniFormTranslationService) {
+                                 BahmniFormTranslationService bahmniFormTranslationService,
+                                 BahmniFormFilterRegistry bahmniFormFilterRegistry) {
         this.formService = formService;
         this.bahmniFormDao = bahmniFormDao;
         this.administrationService = administrationService;
         this.bahmniFormTranslationService = bahmniFormTranslationService;
+        this.bahmniFormFilterRegistry = bahmniFormFilterRegistry;
     }
 
     public BahmniFormServiceImpl() {
@@ -129,27 +138,30 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
     }
 
     @Override
-    public List<BahmniForm> getAllLatestPublishedForms(boolean includeRetired, String encounterUuid) {
-        List<BahmniForm> publishedFormsWithNameTranslation = bahmniFormDao.getAllPublishedFormsWithNameTranslation(includeRetired);
+    public List<BahmniForm> getAllLatestPublishedForms(BahmniFormSearchParams searchParams) {
+        List<BahmniForm> publishedFormsWithNameTranslation = bahmniFormDao.getAllPublishedFormsWithNameTranslation(searchParams.isIncludeRetired());
         List<BahmniForm> latestPublishedForms = getLatestFormByVersion(publishedFormsWithNameTranslation);
 
+        List<BahmniForm> filteredPublishedForms = filterForms(latestPublishedForms, searchParams);
+
+        String encounterUuid = searchParams.getEncounterUuid();
         if (encounterUuid == null) {
-            return latestPublishedForms;
+            return filteredPublishedForms;
         }
 
         Encounter encounter = Context.getEncounterService().getEncounterByUuid(encounterUuid);
         Set<Obs> obs = encounter.getAllObs(false);
         if (CollectionUtils.isEmpty(obs)) {
-            return latestPublishedForms;
+            return filteredPublishedForms;
         }
 
         Map<String, List<Obs>> groupedObsByFormName = obs.parallelStream().filter(o -> o.getFormFieldPath() != null)
                 .collect(Collectors.groupingByConcurrent(BahmniFormServiceImpl::getKey));
         if (MapUtils.isEmpty(groupedObsByFormName)) {
-            return latestPublishedForms;
+            return filteredPublishedForms;
         }
 
-        return mergeForms(publishedFormsWithNameTranslation, latestPublishedForms, groupedObsByFormName);
+        return mergeForms(publishedFormsWithNameTranslation, filteredPublishedForms, groupedObsByFormName);
     }
 
     @Override
@@ -194,8 +206,8 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
     }
 
     @Override
-    public Form getFormDetailsFromFormName(String formName, String formVersion){
-        return formService.getForm(formName,formVersion);
+    public Form getFormDetailsFromFormName(String formName, String formVersion) {
+        return formService.getForm(formName, formVersion);
     }
 
     private String getFormResourceValue(BahmniFormResource bahmniFormResource, String referenceFormUuid) {
@@ -335,9 +347,21 @@ public class BahmniFormServiceImpl extends BaseOpenmrsService implements BahmniF
         }
         return DEFAULT_VERSION;
     }
+
     @Override
     public Form getFormsForGivenUuid(String formUuid) {
         Form retreivedForm = bahmniFormDao.getFormsForGivenUuid(formUuid);
         return retreivedForm;
+    }
+
+    private List<BahmniForm> filterForms(List<BahmniForm> latestPublishedForms, BahmniFormSearchParams searchParams) {
+        BahmniFormFilter formFilter = bahmniFormFilterRegistry.getFilter();
+        if (formFilter == null) {
+            return latestPublishedForms;
+        }
+        BahmniFormFilterParams filterParams = new BahmniFormFilterParams();
+        BeanUtils.copyProperties(searchParams, filterParams);
+        filterParams.setLatestPublishedForms(latestPublishedForms);
+        return formFilter.filter(filterParams);
     }
 }
