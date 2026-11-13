@@ -1,6 +1,6 @@
 package org.bahmni.module.bahmni.ie.apps.controller;
 
-import com.itextpdf.text.DocumentException;
+import com.lowagie.text.DocumentException;
 import org.bahmni.module.bahmni.ie.apps.util.json.impl.ParserImpl;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.impl.BahmniPDFFormImpl;
 import org.json.JSONObject;
