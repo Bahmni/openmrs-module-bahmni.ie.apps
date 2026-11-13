@@ -66,6 +66,6 @@ public class PdfFormConfig {
     }
 
     public void setCheckBox(int heightInPixels, int widthInPixels, int height, int border) {
-        styles.add("float : left;height: "+heightInPixels+"px;max-height: " + height + "%;width :" + widthInPixels + "px;margin-bottom: 15px;border: " + border + "px solid black;clear: both");
+        styles.add("height: "+heightInPixels+"px;max-height: " + height + "%;width :" + widthInPixels + "px;margin-bottom: 15px;border: " + border + "px solid black;");
     }
 }

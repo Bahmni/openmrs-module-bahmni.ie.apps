@@ -1,8 +1,8 @@
 package org.bahmni.module.bahmni.ie.apps.util.pdf.impl;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.parser.PdfTextExtractor;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,7 +41,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(new File(filename).exists(), is(true));
         assertThat(textFromPage, containsString("MyTitle"));
@@ -53,7 +53,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("random"));
     }
@@ -64,7 +64,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("randomLabel"));
     }
@@ -75,7 +75,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("Weight"));
         assertThat(textFromPage, containsString("kg"));
@@ -89,7 +89,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("MySection"));
     }
@@ -100,7 +100,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("DateTime"));
         assertThat(textFromPage, containsString("AM/PM"));
@@ -112,7 +112,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("Date"));
     }
@@ -123,7 +123,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("Yes"));
         assertThat(textFromPage, containsString("No"));
@@ -135,7 +135,7 @@ public class BahmniPDFFormImplTest {
         String filename = bahmniPDFForm.create();
         PdfReader reader = new PdfReader(filename);
 
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
+        String textFromPage = new PdfTextExtractor(reader).getTextFromPage(1);
 
         assertThat(textFromPage, containsString("code1"));
         assertThat(textFromPage, containsString("code2"));

@@ -1,17 +1,19 @@
 package org.bahmni.module.bahmni.ie.apps.util.pdf.impl;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.PdfName;
+import com.lowagie.text.pdf.PdfString;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.log4j.Logger;
 import org.bahmni.module.bahmni.ie.apps.config.PdfFormConfig;
 import org.bahmni.module.bahmni.ie.apps.util.json.impl.ParserImpl;
 import org.bahmni.module.bahmni.ie.apps.util.pdf.BahmniPDFForm;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xhtmlrenderer.pdf.PDFCreationListener;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -20,31 +22,54 @@ import java.util.UUID;
 public class BahmniPDFFormImpl implements BahmniPDFForm {
     private static final String DEFAULT_PDF_FOLDER_PATH = "/home/bahmni/pdf/";
     private static final String BAHMNI_FORM_PATH_PDF = "bahmni.pdf.directory";
+    private static final String PDF_PRODUCER = "Bahmni PDF Form (OpenPDF/Flying Saucer)";
 
     private String title;
-    private final Document document;
-    private final PdfWriter writer;
     private final String filename;
     private String html = "";
 
     PdfFormConfig pdfFormConfig;
     private Logger logger = Logger.getLogger(ParserImpl.class);
 
-    public BahmniPDFFormImpl() throws IOException, DocumentException {
+    public BahmniPDFFormImpl() throws IOException {
         filename = createDirsAndGetFilePath();
-        document = new Document();
         pdfFormConfig = new PdfFormConfig();
-        writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
-        document.open();
     }
 
     @Override
-    public String create() throws IOException {
+    public String create() throws IOException, DocumentException {
         addTitle();
-        XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-                new ByteArrayInputStream(html.getBytes()));
-        document.close();
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setListener(new PDFCreationListener() {
+            @Override
+            public void preOpen(ITextRenderer renderer) {
+            }
+
+            @Override
+            public void preWrite(ITextRenderer renderer, int pageCount) {
+                PdfWriter writer = renderer.getWriter();
+                if (writer != null) {
+                    writer.getInfo().put(PdfName.PRODUCER, new PdfString(PDF_PRODUCER));
+                }
+            }
+
+            @Override
+            public void onClose(ITextRenderer renderer) {
+            }
+        });
+
+        renderer.setDocumentFromString(wrapAsXhtml(html));
+        renderer.layout();
+        try (OutputStream outputStream = new FileOutputStream(filename)) {
+            renderer.createPDF(outputStream);
+        }
         return filename;
+    }
+
+    private String wrapAsXhtml(String bodyHtml) {
+        return "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
+                "<style>@page { size: A4; margin: 36pt; }</style></head><body>" + bodyHtml + "</body></html>";
     }
 
     private String createDirsAndGetFilePath() throws IOException {
@@ -60,7 +85,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     private void addTitle() {
         if (title != null) {
-            html = "<center><h2>" + title + "</h2></center>" + html;
+            html = "<center><h2>" + escape(title) + "</h2></center>" + html;
         }
     }
 
@@ -71,7 +96,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void addLabel(String labelText) {
-        html += "<p>" + labelText + "</p>";
+        html += "<p>" + escape(labelText) + "</p>";
         html += addLineBreak();
     }
 
@@ -93,7 +118,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         String contentColumnStyles = pdfFormConfig.getStyles();
 
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + textFieldLabel + "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(textFieldLabel) + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String contentColumn = "<td " + contentColumnStyles + "></td>";
 
@@ -125,10 +150,10 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setWidth(10);
         String unitColumnStyles = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + numericFieldLabel + "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(numericFieldLabel) + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String contentColumn = "<td " + contentColumnStyles + "></td>";
-        String unitColumn = "<td " + unitColumnStyles + ">" + unit + "</td>";
+        String unitColumn = "<td " + unitColumnStyles + ">" + escape(unit) + "</td>";
 
         html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + contentColumn + unitColumn + "</tr></table>";
         html += addLineBreak();
@@ -138,7 +163,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     @Override
     public void beginSection(String sectionTitle) {
-        html += "<h4>" + sectionTitle + "</h4>";
+        html += "<h4>" + escape(sectionTitle) + "</h4>";
         html += "<table style=\"width: 100%; border: 1px solid black;\"><tr><td>";
         html += addLineBreak();
     }
@@ -165,7 +190,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setMinimumWidth(60);
         String dateTimeBlankColumnLStyles = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + dateTimeFieldLabel +" (dd/mm/yyyy)"+ "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(dateTimeFieldLabel) +" (dd/mm/yyyy)"+ "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String dateTimeBlankColumn  = "<td "+dateTimeBlankColumnLStyles+">__/___/____ , __:__ AM/PM</td>";
 
@@ -189,7 +214,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setMinimumWidth(60);
         String dateBlankColumnLStyles = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + dateFieldLabel +" (dd/mm/yyyy)"+ "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(dateFieldLabel) +" (dd/mm/yyyy)"+ "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String dateBlankColumn  = "<td "+dateBlankColumnLStyles+">__/___/____ </td>";
 
@@ -214,7 +239,7 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setCheckBox(20, 20, 50, 1);
         String checkBoxStyle = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + booleanFieldLabel + "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(booleanFieldLabel) + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
         String contentColumn = "<td " + checkBoxStyle + "> </td> <td>Yes</td> <td " + checkBoxStyle + "> </td> <td>No</td>";
 
@@ -240,12 +265,12 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
         pdfFormConfig.setCheckBox(20, 20, 50, 1);
         String checkBoxStyle = pdfFormConfig.getStyles();
 
-        String labelColumn = "<td " + labelColumnStyles + ">" + codedFieldLabel + "</td>";
+        String labelColumn = "<td " + labelColumnStyles + ">" + escape(codedFieldLabel) + "</td>";
         String emptyColumn = "<td " + emptyColumnStyles + "></td>";
 
         html += "<table " + TableStyles + "><tr>" + labelColumn + emptyColumn + "</tr>";
         for (int index = 0; index < codes.size(); index++) {
-            html += "<tr>" + emptyColumn + "<td " + checkBoxStyle + " ></td><td><label>" + codes.get(index) + "</label></td></tr>";
+            html += "<tr>" + emptyColumn + "<td " + checkBoxStyle + " ></td><td><label>" + escape(codes.get(index)) + "</label></td></tr>";
             html += "<tr>" + emptyColumn + "</tr>";
         }
         html += "</table>";
@@ -254,5 +279,14 @@ public class BahmniPDFFormImpl implements BahmniPDFForm {
 
     private String addLineBreak() {
         return "<br/>";
+    }
+
+    private static String escape(String text) {
+        if (text == null) {
+            return "";
+        }
+        return text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
     }
 }

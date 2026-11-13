@@ -1,6 +1,6 @@
 package org.bahmni.module.bahmni.ie.apps.util.pdf;
 
-import com.itextpdf.text.DocumentException;
+import com.lowagie.text.DocumentException;
 
 import java.io.IOException;
 import java.util.List;
